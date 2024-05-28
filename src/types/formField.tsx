@@ -38,7 +38,7 @@ interface DropdownField extends BaseField {
 
 export interface SectionField extends BaseField {
     type: 'section';
-    fields: FormField[];
+    child: FormField[];
     label: string;
 }
 

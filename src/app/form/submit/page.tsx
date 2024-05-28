@@ -17,18 +17,16 @@ const FormBuilder: React.FC = () => {
     const formFields = useSelector((state: RootState) => state.form.formFields);
     const dispatch: AppDispatch = useDispatch();
 
-    // Load form state from local storage when component mounts
     useEffect(() => {
         const savedFormFields = localStorage.getItem('formFields');
         if (savedFormFields) {
             const parsedFormFields = JSON.parse(savedFormFields);
-            parsedFormFields.forEach((field: FormField) => {
-                dispatch(addField(field));
+            parsedFormFields.forEach((child: FormField) => {
+                dispatch(addField(child));
             });
         }
     }, [dispatch]);
 
-    // Save form state to local storage whenever it changes
     useEffect(() => {
         localStorage.setItem('formFields', JSON.stringify(formFields));
     }, [formFields]);
@@ -52,26 +50,26 @@ const FormBuilder: React.FC = () => {
                 newField = { type, label: 'New Dropdown Field', value: '', options: ['Option 1', 'Option 2'] };
                 break;
             case 'section':
-                newField = { type, label: 'New Section', value: '', fields: [] };
+                newField = { type, label: 'New Section', value: '', child: [] };
                 break;
         }
         if (sectionIndex !== undefined) {
-            dispatch(addSubField({ sectionIndex, field: newField }));
+            dispatch(addSubField({ sectionIndex, child: newField }));
         } else {
             dispatch(addField(newField));
         }
     };
 
-    const handleFieldChange = (index: number, field: FormField) => {
-        dispatch(updateField({ index, field }));
+    const handleFieldChange = (index: number, child: FormField) => {
+        dispatch(updateField({ index, child }));
     };
 
     const handleRemoveField = (index: number) => {
         dispatch(removeField(index));
     };
 
-    const handleSubFieldChange = (sectionIndex: number, fieldIndex: number, field: FormField) => {
-        dispatch(updateSubField({ sectionIndex, fieldIndex, field }));
+    const handleSubFieldChange = (sectionIndex: number, fieldIndex: number, child: FormField) => {
+        dispatch(updateSubField({ sectionIndex, fieldIndex, child }));
     };
 
     const handleRemoveSubField = (sectionIndex: number, fieldIndex: number) => {
@@ -81,18 +79,18 @@ const FormBuilder: React.FC = () => {
     const handleOptionsChange = (index: number, options: string[]) => {
         const field = formFields[index];
         if (field.type === 'multiple-choice' || field.type === 'checkbox' || field.type === 'dropdown') {
-            dispatch(updateField({ index, field: { ...field, options } }));
+            dispatch(updateField({ index, child: { ...field, options } }));
         }
     };
 
     const handleLabelChange = (index: number, label: string) => {
         const field = formFields[index];
-        dispatch(updateField({ index, field: { ...field, label } }));
+        dispatch(updateField({ index, child: { ...field, label } }));
     };
 
     const handleSectionLabelChange = (index: number, label: string) => {
         const section = formFields[index] as SectionField;
-        dispatch(updateField({ index, field: { ...section, label } }));
+        dispatch(updateField({ index, child: { ...section, label } }));
     };
 
     return (

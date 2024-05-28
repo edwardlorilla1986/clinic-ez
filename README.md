@@ -97,7 +97,7 @@ A dynamic form builder application inspired by Google Forms, built using Next.js
 dynamic-form-builder/
 ├── node_modules/
 ├── public/
-├── src/
+├── src
 │   ├── components/
 │   │   ├── CheckboxField.tsx
 │   │   ├── DropdownField.tsx
@@ -111,7 +111,6 @@ dynamic-form-builder/
 │   │   ├── index.ts
 │   ├── types/
 │   │   ├── formField.ts
-├── app/
 │   ├── favicon.icon
 │   ├── layout.tsx
 │   ├── page.tsx

@@ -65,52 +65,56 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({ label, options, value, on
     };
 
     return (
-        <div>
+        <div className="mb-4">
             {isEditingLabel ? (
-                <div>
+                <div className="flex items-center">
                     <input
                         type="text"
                         value={newLabel}
                         onChange={(e) => setNewLabel(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
-                    <button onClick={handleLabelChange}>Save</button>
+                    <button className="ml-2 bg-blue-500 text-white py-1 px-3 rounded" onClick={handleLabelChange}>Save</button>
                 </div>
             ) : (
-                <label onDoubleClick={() => setIsEditingLabel(true)}>{label}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1" onDoubleClick={() => setIsEditingLabel(true)}>{label}</label>
             )}
             {options.map((option, index) => (
-                <div key={index}>
+                <div key={index} className="flex items-center mb-2">
                     <input
                         type="checkbox"
                         checked={value.includes(option)}
                         onChange={() => handleCheckboxChange(option)}
+                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     {editIndex === index ? (
-                        <div>
+                        <div className="flex items-center ml-2">
                             <input
                                 type="text"
                                 value={editValue}
                                 onChange={(e) => setEditValue(e.target.value)}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             />
-                            <button onClick={handleSaveEditOption}>Save</button>
+                            <button className="ml-2 bg-blue-500 text-white py-1 px-3 rounded" onClick={handleSaveEditOption}>Save</button>
                         </div>
                     ) : (
-                        <div>
-                            {option}
-                            <button onClick={() => handleEditOption(index)}>Edit</button>
-                            <button onClick={() => handleDeleteOption(index)}>Delete</button>
+                        <div className="flex items-center ml-2">
+                            <span className="text-sm text-gray-700">{option}</span>
+                            <button className="ml-2 text-blue-500 text-sm" onClick={() => handleEditOption(index)}>Edit</button>
+                            <button className="ml-2 text-red-500 text-sm" onClick={() => handleDeleteOption(index)}>Delete</button>
                         </div>
                     )}
                 </div>
             ))}
-            <div>
+            <div className="flex items-center mt-2">
                 <input
                     type="text"
                     value={newOption}
                     onChange={(e) => setNewOption(e.target.value)}
                     placeholder="New option"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                <button onClick={handleAddOption}>Add Option</button>
+                <button className="ml-2 bg-green-500 text-white py-1 px-3 rounded" onClick={handleAddOption}>Add Option</button>
             </div>
         </div>
     );

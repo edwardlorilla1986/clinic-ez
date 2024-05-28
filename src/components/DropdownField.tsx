@@ -5,8 +5,8 @@ interface DropdownFieldProps {
     options: string[];
     value: string;
     onChange: (value: string) => void;
-    onLabelChange?: (label: string) => void;  // New prop for updating label
-    onOptionsChange?: (options: string[]) => void;  // New prop for updating options
+    onLabelChange?: (label: string) => void;
+    onOptionsChange?: (options: string[]) => void;
 }
 
 const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, onChange, onLabelChange, onOptionsChange }) => {
@@ -58,20 +58,25 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
     };
 
     return (
-        <div>
+        <div className="mb-4">
             {isEditingLabel ? (
-                <div>
+                <div className="flex items-center">
                     <input
                         type="text"
                         value={newLabel}
                         onChange={(e) => setNewLabel(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
-                    <button onClick={handleLabelChange}>Save</button>
+                    <button className="ml-2 bg-blue-500 text-white py-1 px-3 rounded" onClick={handleLabelChange}>Save</button>
                 </div>
             ) : (
-                <label onDoubleClick={() => setIsEditingLabel(true)}>{label}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1" onDoubleClick={() => setIsEditingLabel(true)}>{label}</label>
             )}
-            <select value={value} onChange={(e) => onChange(e.target.value)}>
+            <select
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
                 {options.map((option, index) => (
                     <option key={index} value={option}>
                         {option}
@@ -79,33 +84,35 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
                 ))}
             </select>
             {options.map((option, index) => (
-                <div key={index}>
+                <div key={index} className="flex items-center mt-2">
                     {editIndex === index ? (
-                        <div>
+                        <div className="flex items-center">
                             <input
                                 type="text"
                                 value={editValue}
                                 onChange={(e) => setEditValue(e.target.value)}
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             />
-                            <button onClick={handleSaveEditOption}>Save</button>
+                            <button className="ml-2 bg-blue-500 text-white py-1 px-3 rounded" onClick={handleSaveEditOption}>Save</button>
                         </div>
                     ) : (
-                        <div>
-                            {option}
-                            <button onClick={() => handleEditOption(index)}>Edit</button>
-                            <button onClick={() => handleDeleteOption(index)}>Delete</button>
+                        <div className="flex items-center">
+                            <span className="text-sm text-gray-700">{option}</span>
+                            <button className="ml-2 text-blue-500 text-sm" onClick={() => handleEditOption(index)}>Edit</button>
+                            <button className="ml-2 text-red-500 text-sm" onClick={() => handleDeleteOption(index)}>Delete</button>
                         </div>
                     )}
                 </div>
             ))}
-            <div>
+            <div className="flex items-center mt-2">
                 <input
                     type="text"
                     value={newOption}
                     onChange={(e) => setNewOption(e.target.value)}
                     placeholder="New option"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                <button onClick={handleAddOption}>Add Option</button>
+                <button className="ml-2 bg-green-500 text-white py-1 px-3 rounded" onClick={handleAddOption}>Add Option</button>
             </div>
         </div>
     );
