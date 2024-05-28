@@ -1,61 +1,22 @@
-import {FormField, SectionField} from "@/src/types/formField";
+import {FormField, SectionField, Option as OptionType} from "@/src/types/formField";
 import TextField from "@/src/components/TextField";
-import RemoveButon from "@/src/components/Button/RemoveButton";
+import RemoveButton from "@/src/components/Button/RemoveButton";
 import NumberField from "@/src/components/NumberField";
 import CheckboxField from "@/src/components/CheckboxField";
 import MultipleChoiceField from "@/src/components/MultipleChoiceField";
 import DropdownField from "@/src/components/DropdownField";
 import SectionFieldComponent from "@/src/components/SectionFieldComponent";
 import React from "react";
-import {removeField, removeSubField, updateField, updateSubField} from "@/src/store/formSlice";
-import {AppDispatch, RootState} from "@/src/store";
-import {useDispatch, useSelector} from "react-redux";
-
-type Value =  string | number | string[]
-type Type = "text" | "number" | "checkbox" | "multiple-choice" | "dropdown" | 'section'
+import { useFormBuilder } from "../hooks/useFormBuilder";
 interface FormItemProps{
-    label: string;
-    value:  Value ;
-    type: Type;
-    id: number;
-    index: number,
-    options: string[]
+    field: FormField
+    index: number
 }
-function FormItem({index, options, id, label, value, type}: FormItemProps) {
-    const formFields = useSelector((state: RootState) => state.form.formFields);
-    const dispatch: AppDispatch = useDispatch();
-    const handleFieldChange = (index: number, child: FormField) => {
-        dispatch(updateField({ index, child }));
-    };
+function FormItem({field, index}: FormItemProps) {
+    const {label, type, value, options} = field
 
-    const handleRemoveField = (index: number) => {
-        dispatch(removeField(index));
-    };
-
-    const handleSubFieldChange = (sectionIndex: number, fieldIndex: number, child: FormField) => {
-        dispatch(updateSubField({ sectionIndex, fieldIndex, child }));
-    };
-
-    const handleRemoveSubField = (sectionIndex: number, fieldIndex: number) => {
-        dispatch(removeSubField({ sectionIndex, fieldIndex }));
-    };
-
-    const handleOptionsChange = (index: number, options: string[]) => {
-        const field = formFields[index];
-        if (field.type === 'multiple-choice' || field.type === 'checkbox' || field.type === 'dropdown') {
-            dispatch(updateField({ index, child: { ...field, options } }));
-        }
-    };
-
-    const handleLabelChange = (index: number, label: string) => {
-        const field = formFields[index];
-        dispatch(updateField({ index, child: { ...field, label } }));
-    };
-
-    const handleSectionLabelChange = (index: number, label: string) => {
-        const section = formFields[index] as SectionField;
-        dispatch(updateField({ index, child: { ...section, label } }));
-    };
+    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useFormBuilder()
+ 
     return (
         <div className="mb-4 p-4 border rounded-lg shadow">
             {type === 'text' && (
@@ -63,61 +24,56 @@ function FormItem({index, options, id, label, value, type}: FormItemProps) {
                     <TextField
                         label={label}
                         value={value as string}
-                        onChange={(value) => handleFieldChange(id, {...field, value})}
-                        onLabelChange={(label) => handleLabelChange(id, label)}
+                        onChange={(value) => handleFieldChange(index, {...field, value})}
+                        onLabelChange={(label) => handleLabelChange(index, label)}
                     />
-                    <RemoveButon onClick={() => handleRemoveField(id)}/>
                 </>
             )}
             {type === 'number' && (
                 <NumberField
                     label={label}
                     value={value as number}
-                    onChange={(value) => handleFieldChange(id, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(id, label)}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
                 />
             )}
             {type === 'checkbox' && (
                 <CheckboxField
                     label={label}
-                    options={options}
-                    value={value as string[]}
-                    onChange={(value) => handleFieldChange(id, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(id, label)}
-                    onOptionsChange={(options) => handleOptionsChange(id, options)}
+                    options={options ?? []}
+                    value={value as OptionType["id"][]}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
             )}
             {type === 'multiple-choice' && (
                 <MultipleChoiceField
                     label={label}
                     options={options}
-                    value={value as string}
-                    onChange={(value) => handleFieldChange(id, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(id, label)}
-                    onOptionsChange={(options) => handleOptionsChange(id, options)}
+                    value={value as OptionType["id"]}
+                    onChange={(value) => handleFieldChange(index, {...field, value,})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
             )}
             {type === 'dropdown' && (
                 <DropdownField
                     label={label}
-                    options={options}
-                    value={value as string}
-                    onChange={(value) => handleFieldChange(id, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(id, label)}
-                    onOptionsChange={(options) => handleOptionsChange(id, options)}
+                    options={options ?? []}
+                    value={value}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
             )}
             {type === 'section' && (
                 <SectionFieldComponent
-                    index={id}
+                    index={index}
                     section={field as SectionField}
-                    onLabelChange={handleSectionLabelChange}
-                    onAddField={handleAddField}
-                    onFieldChange={handleSubFieldChange}
-                    onRemoveField={handleRemoveSubField}
-                    onRemoveSection={handleRemoveField}
                 />
             )}
+            <RemoveButton onClick={() => handleRemoveField(index)}/>
         </div>
     );
 }

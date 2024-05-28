@@ -3,16 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
-import { addField, updateField, removeField, addSubField, updateSubField, removeSubField, setChild } from '../store/formSlice';
-import TextField from '../components/TextField';
-import NumberField from '../components/NumberField';
-import CheckboxField from '../components/CheckboxField';
-import MultipleChoiceField from '../components/MultipleChoiceField';
-import DropdownField from '../components/DropdownField';
-import SectionFieldComponent from '../components/SectionFieldComponent';
-import { FormField, SectionField } from '../types/formField';
-import RemoveButon from "@/src/components/Button/RemoveButton";
+import { addField, addSubField, setChild } from '../store/formSlice';
+
+import { FormField } from '../types/formField';
 import FormItem from "@/src/components/FormItem";
+import { useFormBuilder } from '../hooks/useFormBuilder';
 
 
 
@@ -20,6 +15,8 @@ const FormBuilder: React.FC = () => {
     const formFields = useSelector((state: RootState) => state.form.formFields);
     const dispatch: AppDispatch = useDispatch();
     const [isInitialized, setIsInitialized] = useState(false);
+
+    const { handleAddField } = useFormBuilder()
 
     useEffect(() => {
         const savedFormFields = localStorage.getItem('formFields');
@@ -36,34 +33,7 @@ const FormBuilder: React.FC = () => {
         }
     }, [formFields, isInitialized]);
 
-    const handleAddField = (type: FormField['type'], sectionIndex?: number) => {
-        let newField: FormField;
-        switch (type) {
-            case 'text':
-                newField = { type, label: 'New Text Field', value: '' };
-                break;
-            case 'number':
-                newField = { type, label: 'New Number Field', value: 0 };
-                break;
-            case 'checkbox':
-                newField = { type, label: 'New Checkbox Field', value: [], options: ['Option 1', 'Option 2'] };
-                break;
-            case 'multiple-choice':
-                newField = { type, label: 'New Multiple Choice Field', value: '', options: ['Option 1', 'Option 2'] };
-                break;
-            case 'dropdown':
-                newField = { type, label: 'New Dropdown Field', value: '', options: ['Option 1', 'Option 2'] };
-                break;
-            case 'section':
-                newField = { type, label: 'New Section', value: '', child: [] };
-                break;
-        }
-        if (sectionIndex !== undefined) {
-            dispatch(addSubField({ sectionIndex, child: newField }));
-        } else {
-            dispatch(addField(newField));
-        }
-    };
+   
 
 
 
@@ -79,9 +49,8 @@ const FormBuilder: React.FC = () => {
                 <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={() => handleAddField('section')}>Add Section</button>
             </div>
             {
-                formFields.map( (formField, index ) =>  <FormItem {...formField}/> )
+                formFields.map((field, index) => <FormItem key={index} index={index} field={field} />)
             }
-
         </div>
     );
 };

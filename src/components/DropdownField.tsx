@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
+import { Option } from '../types/formField';
 
 interface DropdownFieldProps {
     label: string;
-    options: string[];
-    value: string;
-    onChange: (value: string) => void;
+    options: Option[];
+    value: Option["id"];
+    onChange: (value: Option["id"]) => void;
     onLabelChange?: (label: string) => void;
-    onOptionsChange?: (options: string[]) => void;
+    onOptionsChange?: (options: Option[]) => void;
 }
 
 const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, onChange, onLabelChange, onOptionsChange }) => {
     const [isEditingLabel, setIsEditingLabel] = useState(false);
     const [newLabel, setNewLabel] = useState(label);
-
+    const initialOption: Option = {
+        id: Math.max(...options.map((o) => o.id), 0) + 1,
+        label: '',
+    }
     const handleLabelChange = () => {
         if (onLabelChange) {
             onLabelChange(newLabel);
@@ -20,28 +24,28 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
         setIsEditingLabel(false);
     };
 
-    const [newOption, setNewOption] = useState('');
+    const [newOptionLabel, setNewOptionLabel] = useState("");
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [editValue, setEditValue] = useState('');
 
     const handleAddOption = () => {
-        if (newOption.trim()) {
+        if (newOptionLabel.trim()) {
             if (onOptionsChange) {
-                onOptionsChange([...options, newOption]);
+                onOptionsChange([...options, {...initialOption, label: newOptionLabel }]);;
             }
-            setNewOption('');
+            setNewOptionLabel("");
         }
     };
 
     const handleEditOption = (index: number) => {
         setEditIndex(index);
-        setEditValue(options[index]);
+        setEditValue(options[index].label);
     };
 
     const handleSaveEditOption = () => {
         if (editValue.trim() && editIndex !== null) {
             const updatedOptions = [...options];
-            updatedOptions[editIndex] = editValue;
+            updatedOptions[editIndex].label = editValue;
             if (onOptionsChange) {
                 onOptionsChange(updatedOptions);
             }
@@ -74,12 +78,12 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
             )}
             <select
                 value={value}
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e) => onChange(parseInt(e.target.value, 10))}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
                 {options.map((option, index) => (
-                    <option key={index} value={option}>
-                        {option}
+                    <option key={index} value={option.id}>
+                        {option.label}
                     </option>
                 ))}
             </select>
@@ -97,7 +101,7 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
                         </div>
                     ) : (
                         <div className="flex items-center">
-                            <span className="text-sm text-gray-700">{option}</span>
+                            <span className="text-sm text-gray-700">{option.label}</span>
                             <button className="ml-2 text-blue-500 text-sm" onClick={() => handleEditOption(index)}>Edit</button>
                             <button className="ml-2 text-red-500 text-sm" onClick={() => handleDeleteOption(index)}>Delete</button>
                         </div>
@@ -107,8 +111,8 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
             <div className="flex items-center mt-2">
                 <input
                     type="text"
-                    value={newOption}
-                    onChange={(e) => setNewOption(e.target.value)}
+                    value={newOptionLabel}
+                    onChange={(e) => setNewOptionLabel(e.target.value)}
                     placeholder="New option"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
