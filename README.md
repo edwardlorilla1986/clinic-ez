@@ -93,32 +93,31 @@ A dynamic form builder application inspired by Google Forms, built using Next.js
 
 ## Project Structure
 
-\`\`\`
-dynamic-form-builder/
-├── node_modules/
-├── public/
-├── src/
-│   ├── components/
-│   │   ├── CheckboxField.tsx
-│   │   ├── DropdownField.tsx
-│   │   ├── FormBuilder.tsx
-│   │   ├── MultipleChoiceField.tsx
-│   │   ├── NumberField.tsx
-│   │   ├── TextField.tsx
-│   ├── store/
-│   │   ├── formSlice.ts
-│   │   ├── index.ts
-│   ├── types/
-│   │   ├── formField.ts
-├── pages/
-│   ├── _app.tsx
-│   ├── index.tsx
-│   ├── submit.tsx
-├── .babelrc
-├── .gitignore
-├── package.json
-├── tsconfig.json
-\`\`\`
+
+- dynamic-form-builder/
+- ├── node_modules/
+- ├── public/
+- ├── src/
+- │   ├── components/
+- │   │   ├── CheckboxField.tsx
+- │   │   ├── DropdownField.tsx
+- │   │   ├── FormBuilder.tsx
+- │   │   ├── MultipleChoiceField.tsx
+- │   │   ├── NumberField.tsx
+- │   │   ├── TextField.tsx
+- │   ├── store/
+- │   │   ├── formSlice.ts
+- │   │   ├── index.ts
+- │   ├── types/
+- │   │   ├── formField.ts
+- ├── pages/
+- │   ├── _app.tsx-
+  │   ├── index.tsx
+- │   ├── submit.tsx
+- ├── .babelrc
+- ├── .gitignore
+- ├── package.json
+- ├── tsconfig.json
 
 ## Components
 
