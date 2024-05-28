@@ -5,15 +5,18 @@ import TextField from '../components/TextField';
 import NumberField from '../components/NumberField';
 import CheckboxField from '../components/CheckboxField';
 import MultipleChoiceField from '../components/MultipleChoiceField';
+import DropdownField from '../components/DropdownField';
 
 const FormSubmission: React.FC = () => {
     const formFields = useSelector((state: RootState) => state.form.formFields);
 
     const handleFieldChange = (index: number, field: any) => {
+        // Handle field value change
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        // Handle form submission logic
         console.log('Form submitted', formFields);
     };
 
@@ -47,6 +50,14 @@ const FormSubmission: React.FC = () => {
                         )}
                         {field.type === 'multiple-choice' && (
                             <MultipleChoiceField
+                                label={field.label}
+                                options={field.options}
+                                value={field.value}
+                                onChange={(value) => handleFieldChange(index, { ...field, value })}
+                            />
+                        )}
+                        {field.type === 'dropdown' && (
+                            <DropdownField
                                 label={field.label}
                                 options={field.options}
                                 value={field.value}

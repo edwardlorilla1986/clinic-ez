@@ -6,6 +6,7 @@ import TextField from './TextField';
 import NumberField from './NumberField';
 import CheckboxField from './CheckboxField';
 import MultipleChoiceField from './MultipleChoiceField';
+import DropdownField from './DropdownField';
 import { FormField } from '../types/formField';
 
 const FormBuilder: React.FC = () => {
@@ -27,6 +28,9 @@ const FormBuilder: React.FC = () => {
             case 'multiple-choice':
                 newField = { type, label: 'New Multiple Choice Field', value: '', options: ['Option 1', 'Option 2'] };
                 break;
+            case 'dropdown':
+                newField = { type, label: 'New Dropdown Field', value: '', options: ['Option 1', 'Option 2'] };
+                break;
         }
         dispatch(addField(newField));
     };
@@ -46,6 +50,7 @@ const FormBuilder: React.FC = () => {
             <button onClick={() => handleAddField('number')}>Add Number Field</button>
             <button onClick={() => handleAddField('checkbox')}>Add Checkbox Field</button>
             <button onClick={() => handleAddField('multiple-choice')}>Add Multiple Choice Field</button>
+            <button onClick={() => handleAddField('dropdown')}>Add Dropdown Field</button>
             {formFields.map((field, index) => (
                 <div key={index}>
                     {field.type === 'text' && (
@@ -72,6 +77,14 @@ const FormBuilder: React.FC = () => {
                     )}
                     {field.type === 'multiple-choice' && (
                         <MultipleChoiceField
+                            label={field.label}
+                            options={field.options}
+                            value={field.value}
+                            onChange={(value) => handleFieldChange(index, { ...field, value })}
+                        />
+                    )}
+                    {field.type === 'dropdown' && (
+                        <DropdownField
                             label={field.label}
                             options={field.options}
                             value={field.value}
