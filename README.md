@@ -65,22 +65,22 @@ A dynamic form builder application inspired by Google Forms, built using Next.js
 
 1. Clone the repository:
 
-   \`\`\`bash
+   ```bash
    git clone https://github.com/your-username/dynamic-form-builder.git
    cd dynamic-form-builder
-   \`\`\`
+   ```
 
 2. Install dependencies:
 
-   \`\`\`bash
+   ```bash
    npm install
-   \`\`\`
+   ```
 
 3. Run the development server:
 
-   \`\`\`bash
+   ```bash
    npm run dev
-   \`\`\`
+   ```
 
 4. Open your browser and navigate to \`http://localhost:3000\`.
 
@@ -93,31 +93,33 @@ A dynamic form builder application inspired by Google Forms, built using Next.js
 
 ## Project Structure
 
-
-- dynamic-form-builder/
-- ├── node_modules/
-- ├── public/
-- ├── src/
-- │   ├── components/
-- │   │   ├── CheckboxField.tsx
-- │   │   ├── DropdownField.tsx
-- │   │   ├── FormBuilder.tsx
-- │   │   ├── MultipleChoiceField.tsx
-- │   │   ├── NumberField.tsx
-- │   │   ├── TextField.tsx
-- │   ├── store/
-- │   │   ├── formSlice.ts
-- │   │   ├── index.ts
-- │   ├── types/
-- │   │   ├── formField.ts
-- ├── pages/
-- │   ├── _app.tsx-
+```
+dynamic-form-builder/
+├── node_modules/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── CheckboxField.tsx
+│   │   ├── DropdownField.tsx
+│   │   ├── FormBuilder.tsx
+│   │   ├── MultipleChoiceField.tsx
+│   │   ├── NumberField.tsx
+│   │   ├── TextField.tsx
+│   ├── store/
+│   │   ├── formSlice.ts
+│   │   ├── index.ts
+│   ├── types/
+│   │   ├── formField.ts
+├── pages/
+│   ├── _app.tsx-
   │   ├── index.tsx
-- │   ├── submit.tsx
-- ├── .babelrc
-- ├── .gitignore
-- ├── package.json
-- ├── tsconfig.json
+│   ├── submit.tsx
+├── .babelrc
+├── .gitignore
+├── package.json
+├── tsconfig.json
+
+```
 
 ## Components
 
