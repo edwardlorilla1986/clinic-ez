@@ -1,4 +1,4 @@
-export type FormFieldType = 'text' | 'number' | 'checkbox';
+export type FormFieldType = 'text' | 'number' | 'checkbox' | 'multiple-choice';
 
 interface BaseField {
     type: FormFieldType;
@@ -22,4 +22,10 @@ interface CheckboxField extends BaseField {
     options: string[];
 }
 
-export type FormField = TextField | NumberField | CheckboxField;
+interface MultipleChoiceField extends BaseField {
+    type: 'multiple-choice';
+    value: string;
+    options: string[];
+}
+
+export type FormField = TextField | NumberField | CheckboxField | MultipleChoiceField;

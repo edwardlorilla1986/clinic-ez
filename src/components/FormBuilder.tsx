@@ -5,6 +5,7 @@ import { addField, updateField, removeField } from '../store/formSlice';
 import TextField from './TextField';
 import NumberField from './NumberField';
 import CheckboxField from './CheckboxField';
+import MultipleChoiceField from './MultipleChoiceField';
 import { FormField } from '../types/formField';
 
 const FormBuilder: React.FC = () => {
@@ -22,6 +23,9 @@ const FormBuilder: React.FC = () => {
                 break;
             case 'checkbox':
                 newField = { type, label: 'New Checkbox Field', value: [], options: ['Option 1', 'Option 2'] };
+                break;
+            case 'multiple-choice':
+                newField = { type, label: 'New Multiple Choice Field', value: '', options: ['Option 1', 'Option 2'] };
                 break;
         }
         dispatch(addField(newField));
@@ -41,6 +45,7 @@ const FormBuilder: React.FC = () => {
             <button onClick={() => handleAddField('text')}>Add Text Field</button>
             <button onClick={() => handleAddField('number')}>Add Number Field</button>
             <button onClick={() => handleAddField('checkbox')}>Add Checkbox Field</button>
+            <button onClick={() => handleAddField('multiple-choice')}>Add Multiple Choice Field</button>
             {formFields.map((field, index) => (
                 <div key={index}>
                     {field.type === 'text' && (
@@ -59,6 +64,14 @@ const FormBuilder: React.FC = () => {
                     )}
                     {field.type === 'checkbox' && (
                         <CheckboxField
+                            label={field.label}
+                            options={field.options}
+                            value={field.value}
+                            onChange={(value) => handleFieldChange(index, { ...field, value })}
+                        />
+                    )}
+                    {field.type === 'multiple-choice' && (
+                        <MultipleChoiceField
                             label={field.label}
                             options={field.options}
                             value={field.value}
