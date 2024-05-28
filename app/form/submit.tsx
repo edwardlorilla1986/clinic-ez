@@ -1,11 +1,12 @@
+'use client';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import TextField from '../components/TextField';
-import NumberField from '../components/NumberField';
-import CheckboxField from '../components/CheckboxField';
-import MultipleChoiceField from '../components/MultipleChoiceField';
-import DropdownField from '../components/DropdownField';
+import { RootState } from '@/src/store';
+import TextField from '@/src/components/TextField';
+import NumberField from '@/src/components/NumberField';
+import CheckboxField from '@/src/components/CheckboxField';
+import MultipleChoiceField from '@/src/components/MultipleChoiceField';
+import DropdownField from '@/src/components/DropdownField';
 
 const FormSubmission: React.FC = () => {
     const formFields = useSelector((state: RootState) => state.form.formFields);
@@ -17,7 +18,7 @@ const FormSubmission: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Handle form submission logic
-        console.log('Form submitted', formFields);
+        console.log('form submitted', formFields);
     };
 
     return (
