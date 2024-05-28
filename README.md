@@ -103,6 +103,7 @@ dynamic-form-builder/
 │   │   ├── DropdownField.tsx
 │   │   ├── FormBuilder.tsx
 │   │   ├── MultipleChoiceField.tsx
+│   │   ├── SectionFieldComponent.tsx
 │   │   ├── NumberField.tsx
 │   │   ├── TextField.tsx
 │   ├── store/
