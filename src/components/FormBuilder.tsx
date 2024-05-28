@@ -4,11 +4,11 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { addField, updateField, removeField } from '../store/formSlice';
-import TextField from './TextField';
-import NumberField from './NumberField';
-import CheckboxField from './CheckboxField';
-import MultipleChoiceField from './MultipleChoiceField';
-import DropdownField from './DropdownField';
+import TextField from '../components/TextField';
+import NumberField from '../components/NumberField';
+import CheckboxField from '../components/CheckboxField';
+import MultipleChoiceField from '../components/MultipleChoiceField';
+import DropdownField from '../components/DropdownField';
 import { FormField } from '../types/formField';
 
 const FormBuilder: React.FC = () => {
@@ -45,6 +45,18 @@ const FormBuilder: React.FC = () => {
         dispatch(removeField(index));
     };
 
+    const handleOptionsChange = (index: number, options: string[]) => {
+        const field = formFields[index];
+        if (field.type === 'multiple-choice' || field.type === 'checkbox' || field.type === 'dropdown') {
+            dispatch(updateField({ index, field: { ...field, options } }));
+        }
+    };
+
+    const handleLabelChange = (index: number, label: string) => {
+        const field = formFields[index];
+        dispatch(updateField({ index, field: { ...field, label } }));
+    };
+
     return (
         <div>
             <h1>Form Builder</h1>
@@ -60,6 +72,7 @@ const FormBuilder: React.FC = () => {
                             label={field.label}
                             value={field.value}
                             onChange={(value) => handleFieldChange(index, { ...field, value })}
+                            onLabelChange={(label) => handleLabelChange(index, label)}
                         />
                     )}
                     {field.type === 'number' && (
@@ -67,6 +80,7 @@ const FormBuilder: React.FC = () => {
                             label={field.label}
                             value={field.value}
                             onChange={(value) => handleFieldChange(index, { ...field, value })}
+                            onLabelChange={(label) => handleLabelChange(index, label)}
                         />
                     )}
                     {field.type === 'checkbox' && (
@@ -75,6 +89,8 @@ const FormBuilder: React.FC = () => {
                             options={field.options}
                             value={field.value}
                             onChange={(value) => handleFieldChange(index, { ...field, value })}
+                            onLabelChange={(label) => handleLabelChange(index, label)}
+                            onOptionsChange={(options) => handleOptionsChange(index, options)}
                         />
                     )}
                     {field.type === 'multiple-choice' && (
@@ -83,6 +99,8 @@ const FormBuilder: React.FC = () => {
                             options={field.options}
                             value={field.value}
                             onChange={(value) => handleFieldChange(index, { ...field, value })}
+                            onLabelChange={(label) => handleLabelChange(index, label)}
+                            onOptionsChange={(options) => handleOptionsChange(index, options)}
                         />
                     )}
                     {field.type === 'dropdown' && (
@@ -91,6 +109,8 @@ const FormBuilder: React.FC = () => {
                             options={field.options}
                             value={field.value}
                             onChange={(value) => handleFieldChange(index, { ...field, value })}
+                            onLabelChange={(label) => handleLabelChange(index, label)}
+                            onOptionsChange={(options) => handleOptionsChange(index, options)}
                         />
                     )}
                     <button onClick={() => handleRemoveField(index)}>Remove</button>
