@@ -34,7 +34,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
     };
 
     return (
-        <div>
+        <fieldset>
             {isEditingLabel ? (
                 <div>
                     <input
@@ -104,7 +104,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
                 </div>
             ))}
             <button onClick={() => onRemoveSection(index)}>Remove Section</button>
-        </div>
+        </fieldset>
     );
 };
 

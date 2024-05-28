@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
-import { addField, updateField, removeField, addSubField, updateSubField, removeSubField } from '../store/formSlice';
+import { addField, updateField, removeField, addSubField, updateSubField, removeSubField, setFields } from '../store/formSlice';
 import TextField from '../components/TextField';
 import NumberField from '../components/NumberField';
 import CheckboxField from '../components/CheckboxField';
@@ -15,11 +15,23 @@ import { FormField, SectionField } from '../types/formField';
 const FormBuilder: React.FC = () => {
     const formFields = useSelector((state: RootState) => state.form.formFields);
     const dispatch: AppDispatch = useDispatch();
+    const [isInitialized, setIsInitialized] = useState(false);
+
+    useEffect(() => {
+        const savedFormFields = localStorage.getItem('formFields');
+        if (savedFormFields) {
+            const parsedFormFields = JSON.parse(savedFormFields);
+            dispatch(setFields(parsedFormFields));
+        }
+        setIsInitialized(true);
+    }, [dispatch]);
 
     // Save form state to local storage whenever it changes
     useEffect(() => {
-        localStorage.setItem('formFields', JSON.stringify(formFields));
-    }, [formFields]);
+        if (isInitialized) {
+            localStorage.setItem('formFields', JSON.stringify(formFields));
+        }
+    }, [formFields, isInitialized]);
 
     const handleAddField = (type: FormField['type'], sectionIndex?: number) => {
         let newField: FormField;

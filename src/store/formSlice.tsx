@@ -47,25 +47,15 @@ interface FormState {
     formFields: FormField[];
 }
 
-const loadStateFromLocalStorage = (): FormState => {
-    try {
-        const serializedState = localStorage.getItem('formFields');
-        if (serializedState === null) {
-            return { formFields: [] };
-        }
-        return JSON.parse(serializedState);
-    } catch (err) {
-        console.error('Could not load state from local storage', err);
-        return { formFields: [] };
-    }
-};
-
-const initialState: FormState = loadStateFromLocalStorage();
+const initialState: FormState = { formFields: [] };
 
 const formSlice = createSlice({
     name: 'form',
     initialState,
     reducers: {
+        setFields: (state, action: PayloadAction<FormField[]>) => {
+            state.formFields = action.payload;
+        },
         addField: (state, action: PayloadAction<FormField>) => {
             state.formFields.push(action.payload);
         },
@@ -94,5 +84,5 @@ const formSlice = createSlice({
     },
 });
 
-export const { addField, updateField, removeField, addSubField, updateSubField, removeSubField } = formSlice.actions;
+export const { setFields, addField, updateField, removeField, addSubField, updateSubField, removeSubField } = formSlice.actions;
 export default formSlice.reducer;
