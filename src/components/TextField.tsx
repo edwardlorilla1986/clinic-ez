@@ -4,7 +4,7 @@ interface TextFieldProps {
     label: string;
     value: string;
     onChange: (value: string) => void;
-    onLabelChange: (label: string) => void;  // New prop for updating label
+    onLabelChange?: (label: string) => void;  // New prop for updating label
 }
 
 const TextField: React.FC<TextFieldProps> = ({ label, value, onChange, onLabelChange }) => {

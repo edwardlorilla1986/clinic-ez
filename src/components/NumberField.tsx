@@ -4,7 +4,7 @@ interface NumberFieldProps {
     label: string;
     value: number;
     onChange: (value: number) => void;
-    onLabelChange: (label: string) => void;  // New prop for updating label
+    onLabelChange?: (label: string) => void;  // New prop for updating label
 }
 
 const NumberField: React.FC<NumberFieldProps> = ({ label, value, onChange, onLabelChange }) => {
@@ -12,7 +12,9 @@ const NumberField: React.FC<NumberFieldProps> = ({ label, value, onChange, onLab
     const [newLabel, setNewLabel] = useState(label);
 
     const handleLabelChange = () => {
-        onLabelChange(newLabel);
+        if (onLabelChange) {
+            onLabelChange(newLabel);
+        }
         setIsEditingLabel(false);
     };
 

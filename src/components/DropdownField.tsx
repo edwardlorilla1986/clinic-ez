@@ -5,8 +5,8 @@ interface DropdownFieldProps {
     options: string[];
     value: string;
     onChange: (value: string) => void;
-    onLabelChange: (label: string) => void;  // New prop for updating label
-    onOptionsChange: (options: string[]) => void;  // New prop for updating options
+    onLabelChange?: (label: string) => void;  // New prop for updating label
+    onOptionsChange?: (options: string[]) => void;  // New prop for updating options
 }
 
 const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, onChange, onLabelChange, onOptionsChange }) => {
@@ -14,7 +14,9 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
     const [newLabel, setNewLabel] = useState(label);
 
     const handleLabelChange = () => {
-        onLabelChange(newLabel);
+        if (onLabelChange) {
+            onLabelChange(newLabel);
+        }
         setIsEditingLabel(false);
     };
 
@@ -24,7 +26,9 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
 
     const handleAddOption = () => {
         if (newOption.trim()) {
-            onOptionsChange([...options, newOption]);
+            if (onOptionsChange) {
+                onOptionsChange([...options, newOption]);
+            }
             setNewOption('');
         }
     };
@@ -38,7 +42,9 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
         if (editValue.trim() && editIndex !== null) {
             const updatedOptions = [...options];
             updatedOptions[editIndex] = editValue;
-            onOptionsChange(updatedOptions);
+            if (onOptionsChange) {
+                onOptionsChange(updatedOptions);
+            }
             setEditIndex(null);
             setEditValue('');
         }
@@ -46,7 +52,9 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
 
     const handleDeleteOption = (index: number) => {
         const updatedOptions = options.filter((_, i) => i !== index);
-        onOptionsChange(updatedOptions);
+        if (onOptionsChange) {
+            onOptionsChange(updatedOptions);
+        }
     };
 
     return (

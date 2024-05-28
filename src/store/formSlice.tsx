@@ -1,14 +1,66 @@
-// src/store/formSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FormField } from '../types/formField';
+
+export type FormFieldType = 'text' | 'number' | 'checkbox' | 'multiple-choice' | 'dropdown' | 'section';
+
+interface BaseField {
+    type: FormFieldType;
+    label: string;
+    value: any;
+}
+
+interface TextField extends BaseField {
+    type: 'text';
+    value: string;
+}
+
+interface NumberField extends BaseField {
+    type: 'number';
+    value: number;
+}
+
+interface CheckboxField extends BaseField {
+    type: 'checkbox';
+    value: string[];
+    options: string[];
+}
+
+interface MultipleChoiceField extends BaseField {
+    type: 'multiple-choice';
+    value: string;
+    options: string[];
+}
+
+interface DropdownField extends BaseField {
+    type: 'dropdown';
+    value: string;
+    options: string[];
+}
+
+interface SectionField extends BaseField {
+    type: 'section';
+    fields: FormField[];
+}
+
+export type FormField = TextField | NumberField | CheckboxField | MultipleChoiceField | DropdownField | SectionField;
 
 interface FormState {
     formFields: FormField[];
 }
 
-const initialState: FormState = {
-    formFields: []
+const loadStateFromLocalStorage = (): FormState => {
+    try {
+        const serializedState = localStorage.getItem('formFields');
+        if (serializedState === null) {
+            return { formFields: [] };
+        }
+        return JSON.parse(serializedState);
+    } catch (err) {
+        console.error('Could not load state from local storage', err);
+        return { formFields: [] };
+    }
 };
+
+const initialState: FormState = loadStateFromLocalStorage();
 
 const formSlice = createSlice({
     name: 'form',
@@ -23,9 +75,24 @@ const formSlice = createSlice({
         },
         removeField: (state, action: PayloadAction<number>) => {
             state.formFields.splice(action.payload, 1);
-        }
-    }
+        },
+        addSubField: (state, action: PayloadAction<{ sectionIndex: number; field: FormField }>) => {
+            const { sectionIndex, field } = action.payload;
+            const section = state.formFields[sectionIndex] as SectionField;
+            section.fields.push(field);
+        },
+        updateSubField: (state, action: PayloadAction<{ sectionIndex: number; fieldIndex: number; field: FormField }>) => {
+            const { sectionIndex, fieldIndex, field } = action.payload;
+            const section = state.formFields[sectionIndex] as SectionField;
+            section.fields[fieldIndex] = field;
+        },
+        removeSubField: (state, action: PayloadAction<{ sectionIndex: number; fieldIndex: number }>) => {
+            const { sectionIndex, fieldIndex } = action.payload;
+            const section = state.formFields[sectionIndex] as SectionField;
+            section.fields.splice(fieldIndex, 1);
+        },
+    },
 });
 
-export const { addField, updateField, removeField } = formSlice.actions;
+export const { addField, updateField, removeField, addSubField, updateSubField, removeSubField } = formSlice.actions;
 export default formSlice.reducer;

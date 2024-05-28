@@ -1,4 +1,6 @@
-export type FormFieldType = 'text' | 'number' | 'checkbox' | 'multiple-choice' | 'dropdown';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+export type FormFieldType = 'text' | 'number' | 'checkbox' | 'multiple-choice' | 'dropdown' | 'section';
 
 interface BaseField {
     type: FormFieldType;
@@ -34,4 +36,10 @@ interface DropdownField extends BaseField {
     options: string[];
 }
 
-export type FormField = TextField | NumberField | CheckboxField | MultipleChoiceField | DropdownField;
+export interface SectionField extends BaseField {
+    type: 'section';
+    fields: FormField[];
+    label: string;
+}
+
+export type FormField = TextField | NumberField | CheckboxField | MultipleChoiceField | DropdownField | SectionField;

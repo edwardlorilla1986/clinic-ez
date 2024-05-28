@@ -116,7 +116,7 @@ dynamic-form-builder/
 │   ├── page.tsx
 │   ├── form 
 │   │   ├── page.tsx 
-│   │   ├── submit.tsx 
+│   │   ├── page.tsx 
 ├── .babelrc
 ├── .gitignore
 ├── package.json

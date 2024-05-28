@@ -2,19 +2,31 @@
 
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../store';
-import { addField, updateField, removeField, addSubField, updateSubField, removeSubField } from '../store/formSlice';
-import TextField from '../components/TextField';
-import NumberField from '../components/NumberField';
-import CheckboxField from '../components/CheckboxField';
-import MultipleChoiceField from '../components/MultipleChoiceField';
-import DropdownField from '../components/DropdownField';
-import SectionFieldComponent from '../components/SectionFieldComponent';
-import { FormField, SectionField } from '../types/formField';
+import { RootState, AppDispatch } from '@/src/store';
+import { addField, updateField, removeField, addSubField, updateSubField, removeSubField } from '@/src/store/formSlice';
+import {FormField, SectionField} from "@/src/types/formField";
+import TextField from "@/src/components/TextField";
+import NumberField from "@/src/components/NumberField";
+import CheckboxField from "@/src/components/CheckboxField";
+import MultipleChoiceField from "@/src/components/MultipleChoiceField";
+import DropdownField from "@/src/components/DropdownField";
+import SectionFieldComponent from "@/src/components/SectionFieldComponent";
+
 
 const FormBuilder: React.FC = () => {
     const formFields = useSelector((state: RootState) => state.form.formFields);
     const dispatch: AppDispatch = useDispatch();
+
+    // Load form state from local storage when component mounts
+    useEffect(() => {
+        const savedFormFields = localStorage.getItem('formFields');
+        if (savedFormFields) {
+            const parsedFormFields = JSON.parse(savedFormFields);
+            parsedFormFields.forEach((field: FormField) => {
+                dispatch(addField(field));
+            });
+        }
+    }, [dispatch]);
 
     // Save form state to local storage whenever it changes
     useEffect(() => {
