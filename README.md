@@ -98,11 +98,25 @@ dynamic-form-builder/
 ├── node_modules/
 ├── public/
 ├── src/
-│   ├── form/
-│   │   ├── page.tsx
-│   │   ├── submit.tsx
+│   ├── components/
+│   │   ├── CheckboxField.tsx
+│   │   ├── DropdownField.tsx
+│   │   ├── FormBuilder.tsx
+│   │   ├── MultipleChoiceField.tsx
+│   │   ├── NumberField.tsx
+│   │   ├── TextField.tsx
+│   ├── store/
+│   │   ├── formSlice.ts
+│   │   ├── index.ts
+│   ├── types/
+│   │   ├── formField.ts
+├── app/
+│   ├── favicon.icon
 │   ├── layout.tsx
 │   ├── page.tsx
+│   ├── form 
+│   │   ├── page.tsx 
+│   │   ├── submit.tsx 
 ├── .babelrc
 ├── .gitignore
 ├── package.json
