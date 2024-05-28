@@ -5,6 +5,7 @@ import NumberField from './NumberField';
 import CheckboxField from './CheckboxField';
 import MultipleChoiceField from './MultipleChoiceField';
 import DropdownField from './DropdownField';
+import {removeField} from "@/src/store/formSlice";
 
 interface SectionFieldComponentProps {
     index: number;
@@ -33,6 +34,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
         setIsEditingLabel(false);
     };
 
+
     return (
         <fieldset className="mb-4 p-4 border rounded-lg shadow">
             {isEditingLabel ? (
@@ -59,6 +61,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
                 <div key={subIndex} className="mb-2 p-2 border rounded">
                     {subField.type === 'text' && (
                         <TextField
+
                             label={subField.label}
                             value={subField.value}
                             onChange={(value) => onFieldChange(index, subIndex, { ...subField, value })}

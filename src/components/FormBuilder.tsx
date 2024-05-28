@@ -11,6 +11,10 @@ import MultipleChoiceField from '../components/MultipleChoiceField';
 import DropdownField from '../components/DropdownField';
 import SectionFieldComponent from '../components/SectionFieldComponent';
 import { FormField, SectionField } from '../types/formField';
+import RemoveButon from "@/src/components/Button/RemoveButton";
+import FormItem from "@/src/components/FormItem";
+
+
 
 const FormBuilder: React.FC = () => {
     const formFields = useSelector((state: RootState) => state.form.formFields);
@@ -61,38 +65,7 @@ const FormBuilder: React.FC = () => {
         }
     };
 
-    const handleFieldChange = (index: number, child: FormField) => {
-        dispatch(updateField({ index, child }));
-    };
 
-    const handleRemoveField = (index: number) => {
-        dispatch(removeField(index));
-    };
-
-    const handleSubFieldChange = (sectionIndex: number, fieldIndex: number, child: FormField) => {
-        dispatch(updateSubField({ sectionIndex, fieldIndex, child }));
-    };
-
-    const handleRemoveSubField = (sectionIndex: number, fieldIndex: number) => {
-        dispatch(removeSubField({ sectionIndex, fieldIndex }));
-    };
-
-    const handleOptionsChange = (index: number, options: string[]) => {
-        const field = formFields[index];
-        if (field.type === 'multiple-choice' || field.type === 'checkbox' || field.type === 'dropdown') {
-            dispatch(updateField({ index, child: { ...field, options } }));
-        }
-    };
-
-    const handleLabelChange = (index: number, label: string) => {
-        const field = formFields[index];
-        dispatch(updateField({ index, child: { ...field, label } }));
-    };
-
-    const handleSectionLabelChange = (index: number, label: string) => {
-        const section = formFields[index] as SectionField;
-        dispatch(updateField({ index, child: { ...section, label } }));
-    };
 
     return (
         <div className="container mx-auto p-6">
@@ -105,67 +78,10 @@ const FormBuilder: React.FC = () => {
                 <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={() => handleAddField('dropdown')}>Add Dropdown Field</button>
                 <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={() => handleAddField('section')}>Add Section</button>
             </div>
-            {formFields.map((field, index) => (
-                <div key={index} className="mb-4 p-4 border rounded-lg shadow">
-                    {field.type === 'text' && (
-                        <TextField
-                            label={field.label}
-                            value={field.value}
-                            onChange={(value) => handleFieldChange(index, { ...field, value })}
-                            onLabelChange={(label) => handleLabelChange(index, label)}
-                        />
-                    )}
-                    {field.type === 'number' && (
-                        <NumberField
-                            label={field.label}
-                            value={field.value}
-                            onChange={(value) => handleFieldChange(index, { ...field, value })}
-                            onLabelChange={(label) => handleLabelChange(index, label)}
-                        />
-                    )}
-                    {field.type === 'checkbox' && (
-                        <CheckboxField
-                            label={field.label}
-                            options={field.options}
-                            value={field.value}
-                            onChange={(value) => handleFieldChange(index, { ...field, value })}
-                            onLabelChange={(label) => handleLabelChange(index, label)}
-                            onOptionsChange={(options) => handleOptionsChange(index, options)}
-                        />
-                    )}
-                    {field.type === 'multiple-choice' && (
-                        <MultipleChoiceField
-                            label={field.label}
-                            options={field.options}
-                            value={field.value}
-                            onChange={(value) => handleFieldChange(index, { ...field, value })}
-                            onLabelChange={(label) => handleLabelChange(index, label)}
-                            onOptionsChange={(options) => handleOptionsChange(index, options)}
-                        />
-                    )}
-                    {field.type === 'dropdown' && (
-                        <DropdownField
-                            label={field.label}
-                            options={field.options}
-                            value={field.value}
-                            onChange={(value) => handleFieldChange(index, { ...field, value })}
-                            onLabelChange={(label) => handleLabelChange(index, label)}
-                            onOptionsChange={(options) => handleOptionsChange(index, options)}
-                        />
-                    )}
-                    {field.type === 'section' && (
-                        <SectionFieldComponent
-                            index={index}
-                            section={field as SectionField}
-                            onLabelChange={handleSectionLabelChange}
-                            onAddField={handleAddField}
-                            onFieldChange={handleSubFieldChange}
-                            onRemoveField={handleRemoveSubField}
-                            onRemoveSection={handleRemoveField}
-                        />
-                    )}
-                </div>
-            ))}
+            {
+                formFields.map( (formField, index ) =>  <FormItem {...formField}/> )
+            }
+
         </div>
     );
 };
