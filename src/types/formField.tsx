@@ -51,3 +51,8 @@ export interface SectionField extends BaseField {
 }
 
 export type FormField = TextField | NumberField | CheckboxField | MultipleChoiceField | DropdownField | SectionField;
+export interface FormStructure {
+    title: string;
+    description: string;
+    items: FormField[];
+}

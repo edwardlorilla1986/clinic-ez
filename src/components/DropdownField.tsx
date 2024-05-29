@@ -16,7 +16,8 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
     const initialOption: Option = {
         id: Math.max(...options.map((o) => o.id), 0) + 1,
         label: '',
-    }
+    };
+
     const handleLabelChange = () => {
         if (onLabelChange) {
             onLabelChange(newLabel);
@@ -30,8 +31,9 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
 
     const handleAddOption = () => {
         if (newOptionLabel.trim()) {
+            const newOption: Option = { id: options.length + 1, label: newOptionLabel };
             if (onOptionsChange) {
-                onOptionsChange([...options, {...initialOption, label: newOptionLabel }]);;
+                onOptionsChange([...options, newOption]);
             }
             setNewOptionLabel("");
         }
@@ -44,8 +46,9 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
 
     const handleSaveEditOption = () => {
         if (editValue.trim() && editIndex !== null) {
-            const updatedOptions = [...options];
-            updatedOptions[editIndex].label = editValue;
+            const updatedOptions = options.map((option, i) =>
+                i === editIndex ? { ...option, label: editValue } : option
+            );
             if (onOptionsChange) {
                 onOptionsChange(updatedOptions);
             }
