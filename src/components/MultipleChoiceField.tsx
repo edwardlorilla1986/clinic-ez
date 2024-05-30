@@ -27,7 +27,7 @@ const MultipleChoiceField: React.FC<MultipleChoiceFieldProps> = ({ label, option
 
     const handleAddOption = () => {
         if (newOptionLabel.trim()) {
-            const newOption: Option = { id: options.length + 1, label: newOptionLabel };
+            const newOption: Option = { id: `${options.length + 1}`, label: newOptionLabel };
             if (onOptionsChange) {
                 onOptionsChange([...options, newOption]);
             }
@@ -82,7 +82,7 @@ const MultipleChoiceField: React.FC<MultipleChoiceFieldProps> = ({ label, option
                         name={label}
                         value={option.id}
                         checked={value === option.id}
-                        onChange={(e) => onChange(parseInt(e.target.value, 10))}
+                        onChange={(e) => onChange(e.target.value)}
                         className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                     />
                     {editIndex === index ? (
