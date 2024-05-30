@@ -1,86 +1,123 @@
+import { addField } from '@/src/store/formSlice';
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addField, addSubField, removeField, removeSubField, updateField, updateSubField } from "../store/formSlice";
-import { RootState } from "../store";
-import { FormField, Option, SectionField } from "../types/formField";
+import { FormField, SectionField } from "../types/formField";
+
+type FormBuilderFieldTypes = 'text'  | 'checkbox' | 'number' | 'multiple-choice' | 'dropdown' | 'section';
+type FormItem = FormField | SectionField;
+type FormType = {
+    id: number;
+    title: string;
+    description: string;
+    items: FormItem[];
+}
+const initialForm:FormType = {
+    id: Math.floor(Math.random() * 1000),
+    title: 'New Form',
+    description: 'Create a new form',
+    items: []
+}
 
 export const useFormBuilder = () => {
-    const dispatch = useDispatch();
-    const form = useSelector((state: RootState) => state.form.form);
 
-    const initialOptions: Option[] = [{ id: 1, label: 'Option 1' }, { id: 2, label: 'Option 2' }];
+    const [form, setForm] = React.useState<FormType>();
 
-    const handleAddField = (type: FormField['type'], sectionIndex?: number) => {
-        let newField: FormField;
-        switch (type) {
-            case 'text':
-                newField = { type, label: 'New Text Field', value: '' };
-                break;
-            case 'number':
-                newField = { type, label: 'New Number Field', value: 0 };
-                break;
-            case 'checkbox':
-                newField = { type, label: 'New Checkbox Field', value: [], options: initialOptions };
-                break;
-            case 'multiple-choice':
-                newField = { type, label: 'New Multiple Choice Field', value: 1, options: initialOptions };
-                break;
-            case 'dropdown':
-                newField = { type, label: 'New Dropdown Field', value: 1, options: initialOptions };
-                break;
-            case 'section':
-                newField = { type, label: 'New Section', value: '', child: [] };
-                break;
+    const createForm = () => {
+        setForm(initialForm);
+    }
+
+    const updateTitle = (title: string) => {
+        setForm((prevForm) => {
+            return {
+                ...prevForm?? initialForm,
+                title
+            }
+        });
+    }
+
+    const updateDescription = (description: string) => {
+        setForm((prevForm) => {
+            return {
+                ...prevForm?? initialForm,
+                description
+            }
+        });
+    }
+
+    const addField = (field: FormField, sectionIndex?: number) => {
+        console.log("addField", {field, sectionIndex});
+        
+        const newField: FormField = {...field,  child: [], options: [], type: field.type as any, label: `New ${field.type} Field`, value: field.type === 'number'? 0 : '' };
+
+        setForm((prevForm) => {
+            const updatedItems = [...prevForm?.items ?? []];
+            if (sectionIndex !== undefined) {
+                const section = prevForm?.items[sectionIndex] as SectionField;
+                console.log({section});
+                section?.child?.push(newField);
+                updatedItems[sectionIndex] = section;
+            } else {
+                updatedItems.push(newField);
+            }
+            return {
+                ...prevForm ?? initialForm,
+                items: updatedItems
+            };
+        });
+    }
+
+
+    const updateField = (fieldIndex: number, field: FormField,sectionIndex?: number) => {
+        setForm((prevForm) => {
+            const updatedItems = [...prevForm?.items ?? []];
+            if (sectionIndex !== undefined && fieldIndex!== undefined) {
+                const section = prevForm?.items[sectionIndex] as SectionField;
+                section.child[fieldIndex] = field;
+                updatedItems[sectionIndex] = section;
+            } else {
+                updatedItems[fieldIndex] = field;
+            }
+            return {
+               ...prevForm?? initialForm,
+                items: updatedItems
+            };
         }
-        if (sectionIndex !== undefined) {
-            dispatch(addSubField({ sectionIndex, child: newField }));
-        } else {
-            dispatch(addField(newField));
+    )};
+
+    const removeField = (fieldIndex: number, sectionIndex?: number) => {
+        setForm((prevForm) => {
+            const updatedItems = [...prevForm?.items?? []];
+            if (sectionIndex !== undefined && fieldIndex !== undefined) {
+                const section = prevForm?.items[sectionIndex] as SectionField;
+                section.child.splice(fieldIndex, 1);
+                updatedItems[sectionIndex] = section;
+                return {
+                   ...prevForm?? initialForm,
+                    items: updatedItems
+                };
+            }
+            updatedItems.splice(fieldIndex, 1);
+            return {
+               ...prevForm?? initialForm,
+                items: updatedItems
+            };
+            
         }
-    };
+    )};
 
-    const handleFieldChange = (index: number, child: FormField) => {
-        dispatch(updateField({ index, child }));
-    };
+    const cleanUp = () => {
+        setForm(undefined);
+    }
 
-    const handleRemoveField = (index: number) => {
-        dispatch(removeField(index));
-    };
-
-    const handleSubFieldChange = (sectionIndex: number, fieldIndex: number, child: FormField) => {
-        dispatch(updateSubField({ sectionIndex, fieldIndex, child }));
-    };
-
-    const handleRemoveSubField = (sectionIndex: number, fieldIndex: number) => {
-        dispatch(removeSubField({ sectionIndex, fieldIndex }));
-    };
-
-    const handleOptionsChange = (index: number, options: Option[]) => {
-        const field = form.items[index];
-        if (field.type === 'multiple-choice' || field.type === 'checkbox' || field.type === 'dropdown') {
-            dispatch(updateField({ index, child: { ...field, options } }));
-        }
-    };
-
-    const handleLabelChange = (index: number, label: string) => {
-        const field = form.items[index];
-        dispatch(updateField({ index, child: { ...field, label } }));
-    };
-
-    const handleSectionLabelChange = (index: number, label: string) => {
-        const section = form.items[index] as SectionField;
-        dispatch(updateField({ index, child: { ...section, label } }));
-    };
 
     return {
         form,
-        handleAddField,
-        handleFieldChange,
-        handleRemoveField,
-        handleSubFieldChange,
-        handleRemoveSubField,
-        handleOptionsChange,
-        handleLabelChange,
-        handleSectionLabelChange,
-    };
+        updateTitle,
+        updateDescription, 
+        createForm,
+        addField,
+        updateField,
+        removeField,
+        cleanUp
+    }
+    
 }

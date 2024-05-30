@@ -8,6 +8,8 @@ export type Option = {
 }
 
 interface BaseField {
+    id: number;
+    key: string;
     type: FormFieldType;
     label: string;
     value: any;
