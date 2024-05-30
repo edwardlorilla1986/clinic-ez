@@ -92,9 +92,14 @@ const Home: React.FC = () => {
                             Add Interval
                         </button>
                     </div>
-                    {_form.items.map((field, index) => (
-                        <FormItem key={index} index={index} field={field} formId={form.id}/>
-                    ))}
+                    {
+                        form.items.map((field, index) => (
+                            _form.items.map((field, index) => (
+                                <FormItem key={index} index={index} field={field} formId={form.id}/>
+                            ))
+                        ))
+
+                    }
                 </div>
             ))}
         </div>
