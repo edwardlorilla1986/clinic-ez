@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FormAction, useFormBuilder } from "../hooks/useFormBuilder";
-import { FormField, FormStructure, Option } from "../types/formField";
+import {FormField, FormStructure, Option, SectionField} from "../types/formField";
 
 interface FormBuilderProps {
     children: React.ReactNode;
@@ -69,7 +69,7 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
             reader.readAsText(file);
         }
     };
-    
+
 
     const textField = {
         id: Date.now(),
@@ -131,7 +131,7 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         child: [],
         options: [],
     }
-    
+
     const handleAddField = (type: FormField["type"], sectionIndex?: number) => {
         dispatch({
             type: 'addField',
@@ -163,16 +163,11 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         });
     }
 
-    const handleRemoveField = (index: number, sectionIndex?: number) => {
-        dispatch({
-            type: 'removeField',
-            payload: {
-                index,
-                sectionIndex
-            },
-        });
-    }
 
+    const handleRemoveField = (index: number, sectionIndex?: number) => {
+       dispatch({ type: 'removeField', payload: { index, sectionIndex } });
+
+    };
     const handleOptionsChange = (index: number, options: Option[], sectionIndex?: number) => {
         dispatch({
             type: 'updateField',

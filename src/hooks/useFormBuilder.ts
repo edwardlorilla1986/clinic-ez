@@ -1,9 +1,6 @@
-"use client";
-
+// hooks/useFormBuilder.ts
 import { useReducer } from 'react';
-import { FormField, FormStructure } from '../types/formField';
-
-// Define the state and action types
+import { FormField, FormStructure, SectionField } from '../types/formField';
 
 export const initialState: FormStructure = {
     title: 'Form Title',
@@ -15,22 +12,20 @@ export type FormAction =
     | { type: 'setForm'; payload: FormStructure }
     | { type: 'setTitle'; payload: string }
     | { type: 'setDescription'; payload: string }
-    | { type: 'addField'; payload: {sectionIndex?: number, field: FormField} }
-    | { type: 'updateField'; payload: {index: number; sectionIndex?: number, field: FormField } }
-    | { type: 'removeField'; payload: {index: number, sectionIndex?: number;} }
+    | { type: 'addField'; payload: { sectionIndex?: number, field: FormField } }
+    | { type: 'updateField'; payload: { index: number, field: FormField, sectionIndex?: number } }
+    | { type: 'removeField'; payload: { index: number, sectionIndex?: number } };
 
-// Create a reducer function
 function formReducer(state: FormStructure, action: FormAction): FormStructure {
     switch (action.type) {
         case 'setForm':
             return { ...action.payload };
         case 'setTitle':
-            return { ...state, title: action.payload  };
+            return { ...state, title: action.payload };
         case 'setDescription':
-            return { ...state, description: action.payload  };
+            return { ...state, description: action.payload };
         case 'addField':
-            if (typeof action.payload.sectionIndex === 'number') {
-                // Add subfield
+            if (action.payload.sectionIndex !== undefined) {
                 return {
                     ...state,
                     items: state.items.map((item, index) => {
@@ -45,12 +40,10 @@ function formReducer(state: FormStructure, action: FormAction): FormStructure {
                     }),
                 };
             } else {
-                // Add field
                 return { ...state, items: [...state.items, action.payload.field] };
             }
         case 'updateField':
-            if (typeof action.payload.sectionIndex === 'number') {
-                // Update subfield
+            if (action.payload.sectionIndex !== undefined) {
                 return {
                     ...state,
                     items: state.items.map((item, index) => {
@@ -65,15 +58,13 @@ function formReducer(state: FormStructure, action: FormAction): FormStructure {
                     }),
                 };
             } else {
-                // Update field
                 return {
                     ...state,
                     items: state.items.map((item, index) => index === action.payload.index ? action.payload.field : item),
                 };
             }
         case 'removeField':
-            if (typeof action.payload.sectionIndex === 'number') {
-                // Remove subfield
+            if (action.payload.sectionIndex !== undefined) {
                 return {
                     ...state,
                     items: state.items.map((item, index) => {
@@ -88,7 +79,6 @@ function formReducer(state: FormStructure, action: FormAction): FormStructure {
                     }),
                 };
             } else {
-                // Remove field
                 return {
                     ...state,
                     items: state.items.filter((_, index) => index !== action.payload.index),
@@ -99,11 +89,7 @@ function formReducer(state: FormStructure, action: FormAction): FormStructure {
     }
 }
 
-
 export const useFormBuilder = () => {
-// Use the useReducer hook in your component
     const [state, dispatch] = useReducer(formReducer, initialState);
-
     return [state, dispatch] as const;
-
 };

@@ -33,6 +33,7 @@ const formSlice = createSlice({
             state.form.items[index] = child;
         },
         removeField: (state, action: PayloadAction<number>) => {
+            console.log(state.form, "state.form.")
             state.form.items.splice(action.payload, 1);
         },
         addSubField: (state, action: PayloadAction<{ sectionIndex: number; child: FormField }>) => {
@@ -53,5 +54,5 @@ const formSlice = createSlice({
     },
 });
 
-export const { setForm, setTitle, setDescription, addField, updateField, removeField, addSubField, updateSubField, removeSubField } = formSlice.actions;
+export const {  } = formSlice.actions;
 export default formSlice.reducer;
