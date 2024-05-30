@@ -1,39 +1,39 @@
-import React from 'react';
-import { FormField, SectionField, Option as OptionType } from '@/src/types/formField';
-import TextField from '@/src/components/TextField';
-import NumberField from '@/src/components/NumberField';
-import CheckboxField from '@/src/components/CheckboxField';
-import MultipleChoiceField from '@/src/components/MultipleChoiceField';
-import DropdownField from '@/src/components/DropdownField';
-import SectionFieldComponent from '@/src/components/SectionFieldComponent';
-import { useFormBuilder } from '../hooks/useFormBuilder';
-import RemoveButton from '@/src/components/Button/RemoveButton';
-
-interface FormItemProps {
-    field: FormField;
-    index: number;
-    formId?: number
-
+import {FormField, SectionField, Option as OptionType} from "@/src/types/formField";
+import TextField from "@/src/components/TextField";
+import RemoveButton from "@/src/components/Button/RemoveButton";
+import NumberField from "@/src/components/NumberField";
+import CheckboxField from "@/src/components/CheckboxField";
+import MultipleChoiceField from "@/src/components/MultipleChoiceField";
+import DropdownField from "@/src/components/DropdownField";
+import SectionFieldComponent from "@/src/components/SectionFieldComponent";
+import React from "react";
+import { useFormBuilder } from "../hooks/useFormBuilder";
+interface FormItemProps{
+    field: FormField
+    index: number
 }
+function FormItem({field, index}: FormItemProps) {
+    const {label, type, value, options} = field
 
-const FormItem: React.FC<FormItemProps> = ({ field, index }) => {
-    const { label, type, value, options } = field;
-    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useFormBuilder();
+    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useFormBuilder()
+ 
     return (
         <div className="mb-4 p-4 border rounded-lg shadow">
             {type === 'text' && (
-                <TextField
-                    label={label}
-                    value={value as string}
-                    onChange={(value) => handleFieldChange(index, { ...field, value })}
-                    onLabelChange={(label) => handleLabelChange(index, label)}
-                />
+                <>
+                    <TextField
+                        label={label}
+                        value={value as string}
+                        onChange={(value) => handleFieldChange(index, {...field, value})}
+                        onLabelChange={(label) => handleLabelChange(index, label)}
+                    />
+                </>
             )}
             {type === 'number' && (
                 <NumberField
                     label={label}
                     value={value as number}
-                    onChange={(value) => handleFieldChange(index, { ...field, value })}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
                     onLabelChange={(label) => handleLabelChange(index, label)}
                 />
             )}
@@ -41,8 +41,8 @@ const FormItem: React.FC<FormItemProps> = ({ field, index }) => {
                 <CheckboxField
                     label={label}
                     options={options ?? []}
-                    value={value as OptionType['id'][]}
-                    onChange={(value) => handleFieldChange(index, { ...field, value })}
+                    value={value as OptionType["id"][]}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
                     onLabelChange={(label) => handleLabelChange(index, label)}
                     onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
@@ -51,8 +51,8 @@ const FormItem: React.FC<FormItemProps> = ({ field, index }) => {
                 <MultipleChoiceField
                     label={label}
                     options={options}
-                    value={value as OptionType['id']}
-                    onChange={(value) => handleFieldChange(index, { ...field, value })}
+                    value={value as OptionType["id"]}
+                    onChange={(value) => handleFieldChange(index, {...field, value,})}
                     onLabelChange={(label) => handleLabelChange(index, label)}
                     onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
@@ -62,7 +62,7 @@ const FormItem: React.FC<FormItemProps> = ({ field, index }) => {
                     label={label}
                     options={options ?? []}
                     value={value}
-                    onChange={(value) => handleFieldChange(index, { ...field, value })}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
                     onLabelChange={(label) => handleLabelChange(index, label)}
                     onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
@@ -73,9 +73,8 @@ const FormItem: React.FC<FormItemProps> = ({ field, index }) => {
                     section={field as SectionField}
                 />
             )}
-            <RemoveButton onClick={() => handleRemoveField(index)} />
+            <RemoveButton onClick={() => handleRemoveField(index)}/>
         </div>
     );
-};
-
-export default FormItem;
+}
+export default FormItem
