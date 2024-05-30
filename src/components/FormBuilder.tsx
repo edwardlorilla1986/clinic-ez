@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { setForm, setTitle, setDescription } from '../store/formSlice';
-import { FormField } from '../types/formField';
 import FormItem from '@/src/components/FormItem';
 import { useFormBuilder } from '../hooks/useFormBuilder';
 
@@ -13,7 +12,7 @@ const FormBuilder: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { handleAddField } = useFormBuilder();
-
+    const [isInitialized, setIsInitialized] = useState(false);
     useEffect(() => {
         const savedForm = localStorage.getItem('form');
         if (savedForm) {
@@ -23,9 +22,12 @@ const FormBuilder: React.FC = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        localStorage.setItem('form', JSON.stringify(form));
-    }, [form]);
+        const savedForm = localStorage.getItem('form');
+        if(savedForm){
+            localStorage.setItem('form', JSON.stringify(form));
+        }
 
+    }, [form]);
     const handleTitleChange = (title: string) => {
         dispatch(setTitle(title));
     };

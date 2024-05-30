@@ -12,12 +12,13 @@ import RemoveButton from '@/src/components/Button/RemoveButton';
 interface FormItemProps {
     field: FormField;
     index: number;
+    formId?: number
+
 }
 
 const FormItem: React.FC<FormItemProps> = ({ field, index }) => {
     const { label, type, value, options } = field;
     const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useFormBuilder();
-
     return (
         <div className="mb-4 p-4 border rounded-lg shadow">
             {type === 'text' && (

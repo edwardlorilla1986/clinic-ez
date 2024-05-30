@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FormField, SectionField, FormStructure } from '../types/formField';
-
-interface FormState {
+export interface FormState {
     form: FormStructure;
 }
 
-const initialState: FormState = {
+export const initialState: FormState = {
     form: {
         title: 'Form Title',
         description: 'Form Description',
