@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { FormField, SectionField } from "../types/formField";
+import React, { useContext, useState } from "react";
+import { SectionField } from "../types/formField";
 import TextField from "./TextField";
 import NumberField from "./NumberField";
 import CheckboxField from "./CheckboxField";
 import MultipleChoiceField from "./MultipleChoiceField";
 import DropdownField from "./DropdownField";
-import { removeField } from "@/src/store/formSlice";
-import { useFormBuilder } from "../hooks/useFormBuilder";
+import { FormBuilderContextType, formBuilderContext } from "../context/FormBuilderContext";
 
 interface SectionFieldComponentProps {
   index: number;
@@ -19,7 +18,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
 }) => {
   const [isEditingLabel, setIsEditingLabel] = useState(false);
   const [newLabel, setNewLabel] = useState(section.label);
-  const { handleSectionLabelChange, handleAddField, handleSubFieldChange, handleRemoveSubField, handleRemoveField  } = useFormBuilder()
+  const { handleLabelChange:handleSectionLabelChange, handleAddField, handleFieldChange, handleRemoveField } = useContext(formBuilderContext) as FormBuilderContextType
 
   const handleLabelChange = () => {
     handleSectionLabelChange(index, newLabel);
@@ -54,31 +53,31 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
       <div className="flex space-x-2 mb-4">
         <button
           className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField?.("text", index)}
+          onClick={() => handleAddField("text", index)}
         >
           Add Text Field
         </button>
         <button
           className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField?.("number", index)}
+          onClick={() => handleAddField("number", index)}
         >
           Add Number Field
         </button>
         <button
           className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField?.("checkbox", index)}
+          onClick={() => handleAddField("checkbox", index)}
         >
           Add Checkbox Field
         </button>
         <button
           className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField?.("multiple-choice", index)}
+          onClick={() => handleAddField("multiple-choice", index)}
         >
           Add Multiple Choice Field
         </button>
         <button
           className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField?.("dropdown", index)}
+          onClick={() => handleAddField("dropdown", index)}
         >
           Add Dropdown Field
         </button>
@@ -93,10 +92,10 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               label={subField.label}
               value={subField.value}
               onChange={(value) =>
-                handleSubFieldChange(index, subIndex, { ...subField, value })
+                handleFieldChange(index, { ...subField, value }, subIndex)
               }
               onLabelChange={(label) =>
-                handleSubFieldChange(index, subIndex, { ...subField, label })
+                handleFieldChange(index, { ...subField, label }, subIndex)
               }
             />
           )}
@@ -105,10 +104,10 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               label={subField.label}
               value={subField.value}
               onChange={(value) =>
-                handleSubFieldChange(index, subIndex, { ...subField, value })
+                handleFieldChange(index, { ...subField, value }, subIndex)
               }
               onLabelChange={(label) =>
-                handleSubFieldChange(index, subIndex, { ...subField, label })
+                handleFieldChange(index, { ...subField, label }, subIndex)
               }
             />
           )}
@@ -118,13 +117,13 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               options={subField?.options ?? []}
               value={subField.value}
               onChange={(value) =>
-                handleSubFieldChange(index, subIndex, { ...subField, value })
+                handleFieldChange(index, { ...subField, value }, subIndex)
               }
               onLabelChange={(label) =>
-                handleSubFieldChange(index, subIndex, { ...subField, label })
+                handleFieldChange(index, { ...subField, label }, subIndex)
               }
               onOptionsChange={(options) =>
-                handleSubFieldChange(index, subIndex, { ...subField, options })
+                handleFieldChange(index, { ...subField, options }, subIndex)
               }
             />
           )}
@@ -134,13 +133,13 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               options={subField.options}
               value={subField.value}
               onChange={(value) =>
-                handleSubFieldChange(index, subIndex, { ...subField, value })
+                handleFieldChange(index, { ...subField, value }, subIndex)
               }
               onLabelChange={(label) =>
-                handleSubFieldChange(index, subIndex, { ...subField, label })
+                handleFieldChange(index, { ...subField, label }, subIndex)
               }
               onOptionsChange={(options) =>
-                handleSubFieldChange(index, subIndex, { ...subField, options })
+                handleFieldChange(index, { ...subField, options }, subIndex)
               }
             />
           )}
@@ -150,19 +149,19 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               options={subField?.options ?? []}
               value={subField.value}
               onChange={(value) =>
-                handleSubFieldChange(index, subIndex, { ...subField, value })
+                handleFieldChange(index, { ...subField, value }, subIndex)
               }
               onLabelChange={(label) =>
-                handleSubFieldChange(index, subIndex, { ...subField, label })
+                handleFieldChange(index, { ...subField, label }, subIndex)
               }
               onOptionsChange={(options) =>
-                handleSubFieldChange(index, subIndex, { ...subField, options })
+                handleFieldChange(index, { ...subField, options }, subIndex)
               }
             />
           )}
           <button
             className="bg-red-500 text-white py-1 px-3 mt-2 rounded"
-            onClick={() => handleRemoveSubField(index, subIndex)}
+            onClick={() => handleRemoveField(index, subIndex)}
           >
             Remove Sub-Item
           </button>

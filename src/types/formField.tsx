@@ -1,55 +1,47 @@
-
-
-export type FormFieldType = 'text' | 'number' | 'checkbox' | 'multiple-choice' | 'dropdown' | 'section';
-
 export type Option = {
-    id: number;
+    id: string;
     label: string;
 }
 
 interface BaseField {
     id: number;
     key: string;
-    type: FormFieldType;
     label: string;
-    value: any;
 }
 
 interface TextField extends BaseField {
     type: 'text';
     value: string;
-    options?: Option[];
 }
 
 interface NumberField extends BaseField {
     type: 'number';
     value: number;
-    options?: Option[];
 }
 
 interface CheckboxField extends BaseField {
     type: 'checkbox';
-    value: Option["id"][];
-    options?: Option[];
+    options: Option[];
+    value: string[];
+
 }
 
 interface MultipleChoiceField extends BaseField {
     type: 'multiple-choice';
-    value: Option["id"];
     options: Option[];
+    value: string;
 }
 
 interface DropdownField extends BaseField {
     type: 'dropdown';
-    value: Option["id"];
-    options?: Option[];
+    options: Option[];
+    value: string;
 }
 
 export interface SectionField extends BaseField {
     type: 'section';
+    options: Option[];
     child: FormField[];
-    label: string;
-    options?: Option[];
 }
 
 export type FormField = TextField | NumberField | CheckboxField | MultipleChoiceField | DropdownField | SectionField;

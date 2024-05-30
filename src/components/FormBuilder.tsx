@@ -1,23 +1,23 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../store';
-import { setForm, setTitle, setDescription } from '../store/formSlice';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import FormItem from '@/src/components/FormItem';
 import { useFormBuilder } from '../hooks/useFormBuilder';
+import { FormField } from '../types/formField';
+import { FormBuilderContextType, formBuilderContext } from '../context/FormBuilderContext';
 
 const FormBuilder: React.FC = () => {
-    const form = useSelector((state: RootState) => state.form.form);
-    const dispatch: AppDispatch = useDispatch();
+    const { dispatch, form, handleTitleChange, handleDescriptionChange, handleExport, handleImport, handleAddField} = useContext(formBuilderContext) as FormBuilderContextType;
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const { handleAddField } = useFormBuilder();
     const [isInitialized, setIsInitialized] = useState(false);
     useEffect(() => {
         const savedForm = localStorage.getItem('form');
         if (savedForm) {
             const parsedForm = JSON.parse(savedForm);
-            dispatch(setForm(parsedForm));
+            dispatch({
+                type: 'setForm',
+                payload: parsedForm,
+            });
         }
     }, [dispatch]);
 
@@ -28,37 +28,8 @@ const FormBuilder: React.FC = () => {
         }
 
     }, [form]);
-    const handleTitleChange = (title: string) => {
-        dispatch(setTitle(title));
-    };
+    
 
-    const handleDescriptionChange = (description: string) => {
-        dispatch(setDescription(description));
-    };
-
-    const handleExport = () => {
-        const dataStr = JSON.stringify(form, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'form.json';
-        a.click();
-        URL.revokeObjectURL(url);
-    };
-
-    const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const result = e.target?.result as string;
-                const importedForm = JSON.parse(result);
-                dispatch(setForm(importedForm));
-            };
-            reader.readAsText(file);
-        }
-    };
 
     return (
         <div className="container mx-auto p-6">
@@ -98,7 +69,12 @@ const FormBuilder: React.FC = () => {
                 />
             </div>
             {form.items.map((field, index) => (
-                <FormItem key={index} index={index} field={field} />
+                <FormItem 
+                    key={index} 
+                    index={index} 
+                    field={field} 
+                    
+                />
             ))}
         </div>
     );

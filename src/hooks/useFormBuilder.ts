@@ -1,149 +1,109 @@
+"use client";
+
 import { useReducer } from 'react';
-import { FormField, SectionField, FormStructure } from '../types/formField';
+import { FormField, FormStructure } from '../types/formField';
 
-export interface FormState {
-    form: FormStructure;
-}
+// Define the state and action types
 
-export const initialState: FormState = {
-    form: {
-        title: 'Form Title',
-        description: 'Form Description',
-        items: [],
-    },
+export const initialState: FormStructure = {
+    title: 'Form Title',
+    description: 'Form Description',
+    items: [],
 };
 
-type Action =
+export type FormAction =
     | { type: 'setForm'; payload: FormStructure }
     | { type: 'setTitle'; payload: string }
     | { type: 'setDescription'; payload: string }
-    | { type: 'addField'; payload: FormField }
-    | { type: 'updateField'; payload: { index: number; child: FormField } }
-    | { type: 'removeField'; payload: number }
-    | { type: 'addSubField'; payload: { sectionIndex: number; child: FormField } }
-    | { type: 'updateSubField'; payload: { sectionIndex: number; fieldIndex: number; child: FormField } }
-    | { type: 'removeSubField'; payload: { sectionIndex: number; fieldIndex: number } };
+    | { type: 'addField'; payload: {sectionIndex?: number, field: FormField} }
+    | { type: 'updateField'; payload: {index: number; sectionIndex?: number, field: FormField } }
+    | { type: 'removeField'; payload: {index: number, sectionIndex?: number;} }
 
-const formReducer = (state: FormState, action: Action): FormState => {
+// Create a reducer function
+function formReducer(state: FormStructure, action: FormAction): FormStructure {
     switch (action.type) {
         case 'setForm':
-            return { ...state, form: action.payload };
+            return { ...action.payload };
         case 'setTitle':
-            return { ...state, form: { ...state.form, title: action.payload } };
+            return { ...state, title: action.payload  };
         case 'setDescription':
-            return { ...state, form: { ...state.form, description: action.payload } };
+            return { ...state, description: action.payload  };
         case 'addField':
-            return { ...state, form: { ...state.form, items: [...state.form.items, action.payload] } };
+            if (typeof action.payload.sectionIndex === 'number') {
+                // Add subfield
+                return {
+                    ...state,
+                    items: state.items.map((item, index) => {
+                        if (index === action.payload.sectionIndex && 'child' in item) {
+                            return {
+                                ...item,
+                                child: [...item.child, action.payload.field],
+                            };
+                        } else {
+                            return item;
+                        }
+                    }),
+                };
+            } else {
+                // Add field
+                return { ...state, items: [...state.items, action.payload.field] };
+            }
         case 'updateField':
-            return {
-                ...state,
-                form: {
-                    ...state.form,
-                    items: state.form.items.map((item, index) =>
-                        index === action.payload.index ? action.payload.child : item
-                    ),
-                },
-            };
+            if (typeof action.payload.sectionIndex === 'number') {
+                // Update subfield
+                return {
+                    ...state,
+                    items: state.items.map((item, index) => {
+                        if (index === action.payload.sectionIndex && 'child' in item) {
+                            return {
+                                ...item,
+                                child: item.child.map((child, childIndex) => childIndex === action.payload.index ? action.payload.field : child),
+                            };
+                        } else {
+                            return item;
+                        }
+                    }),
+                };
+            } else {
+                // Update field
+                return {
+                    ...state,
+                    items: state.items.map((item, index) => index === action.payload.index ? action.payload.field : item),
+                };
+            }
         case 'removeField':
-            return {
-                ...state,
-                form: {
-                    ...state.form,
-                    items: state.form.items.filter((_, index) => index !== action.payload),
-                },
-            };
-        case 'addSubField':
-            return {
-                ...state,
-                form: {
-                    ...state.form,
-                    items: state.form.items.map((item, index) =>
-                        index === action.payload.sectionIndex
-                            ? { ...item, child: [...(item as SectionField).child, action.payload.child] }
-                            : item
-                    ),
-                },
-            };
-        case 'addField':
-            return {
-                ...state,
-                form: {
-                    ...state.form,
-                    items: state.form.items.map((item, index) =>
-                        index === action.payload.sectionIndex
-                            ? { ...item, child: [...(item as SectionField).child, action.payload.child] }
-                            : item
-                    ),
-                },
-            };
-        case 'updateSubField':
-            return {
-                ...state,
-                form: {
-                    ...state.form,
-                    items: state.form.items.map((item, index) =>
-                        index === action.payload.sectionIndex
-                            ? {
+            if (typeof action.payload.sectionIndex === 'number') {
+                // Remove subfield
+                return {
+                    ...state,
+                    items: state.items.map((item, index) => {
+                        if (index === action.payload.sectionIndex && 'child' in item) {
+                            return {
                                 ...item,
-                                child: (item as SectionField).child.map((childItem, childIndex) =>
-                                    childIndex === action.payload.fieldIndex ? action.payload.child : childItem
-                                ),
-                            }
-                            : item
-                    ),
-                },
-            };
-        case 'removeSubField':
-            return {
-                ...state,
-                form: {
-                    ...state.form,
-                    items: state.form.items.map((item, index) =>
-                        index === action.payload.sectionIndex
-                            ? {
-                                ...item,
-                                child: (item as SectionField).child.filter(
-                                    (_, childIndex) => childIndex !== action.payload.fieldIndex
-                                ),
-                            }
-                            : item
-                    ),
-                },
-            };
+                                child: item.child.filter((_, childIndex) => childIndex !== action.payload.index),
+                            };
+                        } else {
+                            return item;
+                        }
+                    }),
+                };
+            } else {
+                // Remove field
+                return {
+                    ...state,
+                    items: state.items.filter((_, index) => index !== action.payload.index),
+                };
+            }
         default:
             return state;
     }
-};
+}
+
 
 export const useFormBuilder = () => {
+// Use the useReducer hook in your component
     const [state, dispatch] = useReducer(formReducer, initialState);
 
-    const setForm = (form: FormStructure) => dispatch({ type: 'setForm', payload: form });
-    const setTitle = (title: string) => dispatch({ type: 'setTitle', payload: title });
-    const setDescription = (description: string) => dispatch({ type: 'setDescription', payload: description });
-    const addField = (field: FormField) => dispatch({ type: 'addField', payload: field });
-    const handleAddField = (field: FormField) => dispatch({ type: 'handleAddField', payload: field });
-    const handleFieldChange = (index: number, child: FormField) => dispatch({ type: 'updateField', payload: { index, child } });
-    const handleLabelChange = (index: number, label: string) => dispatch({ type: 'updateField', payload: { index, child: { ...state.form.items[index], label } } });
-    const handleOptionsChange = (index: number, options: any) => dispatch({ type: 'updateField', payload: { index, child: { ...state.form.items[index], options } } });
-    const handleRemoveField = (index: number) => dispatch({ type: 'removeField', payload: index });
-    const addSubField = (sectionIndex: number, child: FormField) => dispatch({ type: 'addSubField', payload: { sectionIndex, child } });
-    const updateSubField = (sectionIndex: number, fieldIndex: number, child: FormField) => dispatch({ type: 'updateSubField', payload: { sectionIndex, fieldIndex, child } });
-    const removeSubField = (sectionIndex: number, fieldIndex: number) => dispatch({ type: 'removeSubField', payload: { sectionIndex, fieldIndex } });
+    return [state, dispatch] as const;
 
-    return {
-        state,
-        setForm,
-        setTitle,
-        setDescription,
-        addField,
-        handleFieldChange,
-        handleLabelChange,
-        handleOptionsChange,
-        handleRemoveField,
-        handleAddField,
-        addSubField,
-        updateSubField,
-        removeSubField
-    };
 };

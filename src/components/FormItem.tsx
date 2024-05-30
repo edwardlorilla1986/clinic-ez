@@ -6,17 +6,24 @@ import CheckboxField from "@/src/components/CheckboxField";
 import MultipleChoiceField from "@/src/components/MultipleChoiceField";
 import DropdownField from "@/src/components/DropdownField";
 import SectionFieldComponent from "@/src/components/SectionFieldComponent";
-import React from "react";
-import { useFormBuilder } from "../hooks/useFormBuilder";
+import React, { useContext } from "react";
+import { FormBuilderContextType, formBuilderContext } from "../context/FormBuilderContext";
 interface FormItemProps{
     field: FormField
-    index: number
+    index: number,
 }
-function FormItem({field, index}: FormItemProps) {
-    const {label, type, value, options} = field
 
-    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useFormBuilder()
- 
+function FormItem({field, index}: FormItemProps) {
+    const {handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField} = useContext(formBuilderContext) as FormBuilderContextType
+    const {label, type} = field
+    let value, options;
+
+    if (type === 'text' || type === 'number') {
+        value = field.value;
+    } else if (type === 'checkbox' || type === 'multiple-choice' || type === 'dropdown') {
+        value = field.value;
+        options = field.options;
+    }
     return (
         <div className="mb-4 p-4 border rounded-lg shadow">
             {type === 'text' && (
@@ -50,7 +57,7 @@ function FormItem({field, index}: FormItemProps) {
             {type === 'multiple-choice' && (
                 <MultipleChoiceField
                     label={label}
-                    options={options}
+                    options={options ?? []}
                     value={value as OptionType["id"]}
                     onChange={(value) => handleFieldChange(index, {...field, value,})}
                     onLabelChange={(label) => handleLabelChange(index, label)}
@@ -61,7 +68,7 @@ function FormItem({field, index}: FormItemProps) {
                 <DropdownField
                     label={label}
                     options={options ?? []}
-                    value={value}
+                    value={value as string}
                     onChange={(value) => handleFieldChange(index, {...field, value})}
                     onLabelChange={(label) => handleLabelChange(index, label)}
                     onOptionsChange={(options) => handleOptionsChange(index, options)}
