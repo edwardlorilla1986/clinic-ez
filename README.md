@@ -1,5 +1,16 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+
+```
+Navigate to specific forms:
+edoc/heart-request
+edoc/imaging-request
+edoc/laboratory-request
+prescription
+```
+
+
 ## Getting Started
 
 First, run the development server:
@@ -90,6 +101,7 @@ A dynamic form builder application inspired by Google Forms, built using Next.js
 2. Use the buttons to add different types of form fields.
 3. Fill out the fields as needed.
 4. Click "Submit" to see the form data logged in the console.
+
 
 ## Project Structure
 
