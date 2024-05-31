@@ -5,6 +5,7 @@ import FormItem from '@/src/components/FormItem';
 import { FormField } from '@/src/types/formField';
 import { useFormBuilder, initialState } from '@/src/hooks/useFormBuilder';
 import {id} from "postcss-selector-parser";
+import PdfGenerator from "@/src/components/Generator/pdf";
 
 interface LocalForm {
     id: number;
@@ -20,7 +21,87 @@ type handleAddParams = {
 
 const Home: React.FC = () => {
     const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField, form, dispatch } = useContext(formBuilderContext) as FormBuilderContextType;
-
+    const jsonData = {
+        title: "Form Title",
+        description: "Form Description",
+        items: [
+            {
+                type: "text",
+                label: "New Text Field",
+                value: "new text field"
+            },
+            {
+                type: "number",
+                label: "New Number Field",
+                value: 43
+            },
+            {
+                type: "checkbox",
+                label: "New Checkbox Field",
+                value: [3],
+                options: [
+                    {
+                        id: 1,
+                        label: "Option 1"
+                    },
+                    {
+                        id: 2,
+                        label: "Option 2"
+                    },
+                    {
+                        id: 3,
+                        label: "new option 3"
+                    }
+                ]
+            },
+            {
+                type: "multiple-choice",
+                label: "New Multiple Choice Field",
+                value: 1,
+                options: [
+                    {
+                        id: 1,
+                        label: "Option 1"
+                    },
+                    {
+                        id: 2,
+                        label: "Option 2"
+                    },
+                    {
+                        id: 3,
+                        label: "new option 3"
+                    }
+                ]
+            },
+            {
+                type: "dropdown",
+                label: "New Dropdown Field",
+                value: 1,
+                options: [
+                    {
+                        id: 1,
+                        label: "Option 1"
+                    },
+                    {
+                        id: 2,
+                        label: "Option 2"
+                    }
+                ]
+            },
+            {
+                type: "section",
+                label: "New Section",
+                value: "",
+                child: [
+                    {
+                        type: "text",
+                        label: "New Text Field",
+                        value: "new text field"
+                    }
+                ]
+            }
+        ]
+    };
     const handleAddField = (type: FormField["type"], sectionIndex?: number) => {
         let field: FormField;
         const id = Date.now();
@@ -79,7 +160,9 @@ const Home: React.FC = () => {
     return (
 
             <div className="container mx-auto p-6">
+
         <h1 className="text-2xl font-bold mb-6">e-Prescription Builder</h1>
+
     <input
     type="text"
     value={form?.title}
@@ -93,7 +176,8 @@ const Home: React.FC = () => {
     placeholder="Form Description"
     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         />
-
+                {JSON.stringify(form)}
+                <PdfGenerator/>
     {form?.items.map((item, index) => (
         <div key={item.id} className="mb-8 p-6 border rounded-lg shadow my-3">
     <div className="flex space-x-4 mb-6 mt-4">
