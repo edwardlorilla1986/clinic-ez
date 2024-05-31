@@ -1,4 +1,4 @@
-import {FormField, SectionField, Option as OptionType, TextField as TextFieldType, NumberField as NumberFieldType, CheckboxField as CheckboxFieldType, MultipleChoiceField as MultipleChoiceFieldType, DropdownField as DropdownFieldType} from "@/src/types/formField";
+import { FormField, SectionField, Option as OptionType } from "@/src/types/formField";
 import TextField from "@/src/components/TextField";
 import RemoveButton from "@/src/components/Button/RemoveButton";
 import NumberField from "@/src/components/NumberField";
@@ -8,16 +8,18 @@ import DropdownField from "@/src/components/DropdownField";
 import SectionFieldComponent from "@/src/components/SectionFieldComponent";
 import React, { useContext } from "react";
 import { FormBuilderContextType, formBuilderContext } from "../context/FormBuilderContext";
-interface FormItemProps{
-    field: FormField
-    index: number,
+
+interface FormItemProps {
+    field: FormField;
+    index: number;
     sectionIndex?: number;
-    sectionToolbar?: React.ReactNode
+    sectionToolbar?: React.ReactNode;
+    handleRemoveFieldWithCheckboxUpdate?: (index: number, sectionIndex?: number) => void;
 }
 
-function FormItem({field, index, sectionToolbar, sectionIndex}: FormItemProps) {
-    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useContext(formBuilderContext) as FormBuilderContextType
-    const {label, type} = field
+function FormItem({ field, index, sectionToolbar, sectionIndex, handleRemoveFieldWithCheckboxUpdate }: FormItemProps) {
+    const { handleFieldChange, handleLabelChange, handleOptionsChange } = useContext(formBuilderContext) as FormBuilderContextType;
+    const { label, type } = field;
     let value, options;
 
     if (type === 'text' || type === 'number') {
@@ -35,7 +37,6 @@ function FormItem({field, index, sectionToolbar, sectionIndex}: FormItemProps) {
                     value={value as string}
                     onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
                     onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
-
                 />
             )}
             {type === 'number' && (
@@ -83,8 +84,9 @@ function FormItem({field, index, sectionToolbar, sectionIndex}: FormItemProps) {
                     toolBar={sectionToolbar}
                 />
             )}
-            <RemoveButton onClick={() => handleRemoveField(index, sectionIndex)} />
+            <RemoveButton onClick={() => handleRemoveFieldWithCheckboxUpdate?.(index, sectionIndex)} />
         </div>
     );
 }
-export default FormItem
+
+export default FormItem;

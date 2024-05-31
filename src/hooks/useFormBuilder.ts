@@ -1,5 +1,5 @@
 // hooks/useFormBuilder.ts
-import { useReducer } from 'react';
+import {useEffect, useReducer} from 'react';
 import { FormField, FormStructure, SectionField } from '../types/formField';
 
 export const initialState: FormStructure = {
@@ -93,5 +93,8 @@ function formReducer(state: FormStructure, action: FormAction): FormStructure {
 
 export const useFormBuilder = () => {
     const [state, dispatch] = useReducer(formReducer, initialState);
+
+
+
     return [state, dispatch] as const;
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useEffect} from "react";
 import { FormAction, useFormBuilder } from "../hooks/useFormBuilder";
 import { CheckboxField, DropdownField, FormField, FormStructure, MultipleChoiceField, NumberField, Option, SectionField, TextField } from "../types/formField";
 
@@ -36,6 +36,10 @@ export const formBuilderContext = React.createContext<FormBuilderContextType | n
 export default function FormBuilderProvider({ children}: FormBuilderProps) {
 
     const [form, dispatch] = useFormBuilder();
+
+    useEffect(() => {
+        localStorage.setItem('form', JSON.stringify(form));
+    }, [form]);
 
     const handleTitleChange = (title: string) => {
         dispatch({
@@ -289,7 +293,6 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
             },
         });
     }
-
 
   return <formBuilderContext.Provider value={{
         form,
