@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import jsPDF from 'jspdf';
+// @ts-ignore
 import domtoimage from 'dom-to-image';
 import {FormStructure} from "@/src/types/formField";
 
@@ -99,7 +100,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
         const input = hiddenContentRef.current;
 
         domtoimage.toPng(input)
-            .then((imgData) => {
+            .then((imgData: string) => {
                 const pdf = new jsPDF({
                     orientation: 'portrait',
                     unit: 'px',
@@ -108,7 +109,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
                 pdf.addImage(imgData, 'PNG', 0, 0, 918, 1187);
                 pdf.save('e-prescription.pdf');
             })
-            .catch((error) => {
+            .catch((error: string ) => {
                 console.error('Error generating image for PDF:', error);
             });
     };
@@ -165,11 +166,12 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
                         </p>
 
                         {data.items.map((item, index) => {
-                            const brandNameValue = item.child.find(c => c.key === "brand_name")?.value;
-                            const genericNameValue = item.child.find(c => c.key === "generic_name")?.value;
-                            const quantityNameValue = item.child.find(c => c.key === "quantity")?.value;
-                            const intervalNameValue = item.child.find(c => c.key === "interval")?.value;
-                            const tabletNameValue = item.child.find(c => c.key === "tablet")?.value;
+                            var _item = item as SectionItem
+                            const brandNameValue = _item.child.find(c => c.key === "brand_name")?.value;
+                            const genericNameValue = _item.child.find(c => c.key === "generic_name")?.value;
+                            const quantityNameValue = _item.child.find(c => c.key === "quantity")?.value;
+                            const intervalNameValue = _item.child.find(c => c.key === "interval")?.value;
+                            const tabletNameValue = _item.child.find(c => c.key === "tablet")?.value;
                             const genericName = genericNameValue ? `(${genericNameValue})` : null;
                             const quantityName = quantityNameValue !== undefined ? `#${quantityNameValue} tablet/s` : null;
                             const tabletName = tabletNameValue ? `${tabletNameValue}mg tablet` : null;
