@@ -11,10 +11,11 @@ import { FormBuilderContextType, formBuilderContext } from "../context/FormBuild
 interface FormItemProps{
     field: FormField
     index: number,
+    sectionIndex?: number;
     sectionToolbar?: React.ReactNode
 }
 
-function FormItem({field, index, sectionToolbar}: FormItemProps) {
+function FormItem({field, index, sectionToolbar, sectionIndex}: FormItemProps) {
     const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useContext(formBuilderContext) as FormBuilderContextType
     const {label, type} = field
     let value, options;
@@ -32,16 +33,17 @@ function FormItem({field, index, sectionToolbar}: FormItemProps) {
                 <TextField
                     label={label}
                     value={value as string}
-                    onChange={(value) => handleFieldChange(index, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
+
                 />
             )}
             {type === 'number' && (
                 <NumberField
                     label={label}
                     value={value as number}
-                    onChange={(value) => handleFieldChange(index, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
                 />
             )}
             {type === 'checkbox' && (
@@ -49,9 +51,9 @@ function FormItem({field, index, sectionToolbar}: FormItemProps) {
                     label={label}
                     options={options ?? []}
                     value={value as OptionType["id"][]}
-                    onChange={(value) => handleFieldChange(index, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(index, label)}
-                    onOptionsChange={(options) => handleOptionsChange(index, options)}
+                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
                 />
             )}
             {type === 'multiple-choice' && (
@@ -59,9 +61,9 @@ function FormItem({field, index, sectionToolbar}: FormItemProps) {
                     label={label}
                     options={options ?? []}
                     value={value as OptionType["id"]}
-                    onChange={(value) => handleFieldChange(index, {...field, value,})}
-                    onLabelChange={(label) => handleLabelChange(index, label)}
-                    onOptionsChange={(options) => handleOptionsChange(index, options)}
+                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
                 />
             )}
             {type === 'dropdown' && (
@@ -69,9 +71,9 @@ function FormItem({field, index, sectionToolbar}: FormItemProps) {
                     label={label}
                     options={options ?? []}
                     value={value as string}
-                    onChange={(value) => handleFieldChange(index, {...field, value})}
-                    onLabelChange={(label) => handleLabelChange(index, label)}
-                    onOptionsChange={(options) => handleOptionsChange(index, options)}
+                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
                 />
             )}
             {type === 'section' && (
@@ -81,7 +83,7 @@ function FormItem({field, index, sectionToolbar}: FormItemProps) {
                     toolBar={sectionToolbar}
                 />
             )}
-            <RemoveButton onClick={() => handleRemoveField(index)}/>
+            <RemoveButton onClick={() => handleRemoveField(index, sectionIndex)} />
         </div>
     );
 }

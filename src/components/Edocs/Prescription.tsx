@@ -153,7 +153,7 @@ const Home: React.FC = () => {
                     {
                         item?.type === 'section' &&
                         item?.child?.map((supItem, supIndex) => {
-                            return <FormItem key={supIndex} index={supIndex} field={supItem}/>
+                            return <FormItem key={supIndex} index={supIndex} field={supItem} sectionIndex={index}/>
                         })
                     }
 
