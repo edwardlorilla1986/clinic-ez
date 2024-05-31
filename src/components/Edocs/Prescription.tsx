@@ -93,7 +93,6 @@ const Home: React.FC = () => {
     placeholder="Form Description"
     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         />
-        {JSON.stringify(form)}
 
     {form?.items.map((item, index) => (
         <div key={item.id} className="mb-8 p-6 border rounded-lg shadow my-3">

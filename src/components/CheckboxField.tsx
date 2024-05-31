@@ -11,11 +11,11 @@ interface CheckboxFieldProps {
 }
 
 const CheckboxField: React.FC<CheckboxFieldProps> = ({ label, options, value, onChange, onLabelChange, onOptionsChange }) => {
-    
+
     const initialOption: Option = {
-        id: Math.max(...options.map((o) => o.id), 0) + 1,
+        id: (Math.max(...options.map((o) => Number(o.id)), 0) + 1).toString(),
         label: '',
-    }
+    };
     const [isEditingLabel, setIsEditingLabel] = useState(false);
     const [newLabel, setNewLabel] = useState(label);
 
