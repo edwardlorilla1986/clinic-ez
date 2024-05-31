@@ -57,7 +57,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
       {section.child.map((subField, subIndex) => (
         <div
           key={subIndex}
-          className="mb-2 p-2 border rounded"
+          className="my-2 p-2 border rounded"
         >
           {subField.type === "text" && (
             <TextField
@@ -133,7 +133,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
           )}
           <button
             className="bg-red-500 text-white py-1 px-3 mt-2 rounded"
-            onClick={() => handleRemoveField(index, subIndex)}
+            onClick={() => handleRemoveField(subIndex, index)}
           >
             Remove Sub-Item
           </button>

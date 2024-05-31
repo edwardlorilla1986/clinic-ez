@@ -173,6 +173,8 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
     }
 
     const handleRemoveField = (index: number, sectionIndex?: number) => {
+        console.log({index, sectionIndex});
+        
         dispatch({
             type: 'removeField',
             payload: {
@@ -182,7 +184,7 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         });
     }
 
-    const handleOptionsChange = (index: number, options: Option[], sectionIndex?: number) => {
+    const handleOptionsChange = (index: number, options: Option[], sectionIndex?: number) => {        
         dispatch({
             type: 'updateField',
             payload: {
