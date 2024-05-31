@@ -1,9 +1,9 @@
 
 import FormBuilderProvider from '@/src/context/FormBuilderContext';
 import React from 'react';
-import Prescription from "@/src/components/Edocs/Prescription";
-import MedicalCertificate from "@/src/components/Edocs/MedicalCertificate";
-import ImagingRequest from "@/src/components/Edocs/ImagingRequest";
+import Prescription from "@/src/components/Edocs/Build/Prescription";
+import MedicalCertificate from "@/src/components/Edocs/Build/MedicalCertificate";
+import ImagingRequest from "@/src/components/Edocs/Build/ImagingRequest";
 
 
 

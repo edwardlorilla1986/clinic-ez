@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { store } from '@/src/store';
 import "../styles/globals.css";
+import {useRouter} from "next/router";
 interface LayoutProps {
   children: ReactNode;
 }

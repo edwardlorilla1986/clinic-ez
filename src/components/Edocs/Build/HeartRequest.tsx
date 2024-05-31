@@ -51,7 +51,7 @@ const Home: React.FC = () => {
     };
 
     const handleAddCardiovascularProceduresField = useCallback((payload: handleAddParams, sectionIndex?: number) => {
-        handleAddField('multiple-choice', sectionIndex,
+        handleAddField('checkbox', sectionIndex,
             [
                 { id: '1', label: '12 Lead ECG' },
                 { id: '2', label: '15 Lead ECG' },
