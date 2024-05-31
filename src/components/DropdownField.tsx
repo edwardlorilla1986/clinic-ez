@@ -13,10 +13,6 @@ interface DropdownFieldProps {
 const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, onChange, onLabelChange, onOptionsChange }) => {
     const [isEditingLabel, setIsEditingLabel] = useState(false);
     const [newLabel, setNewLabel] = useState(label);
-    const initialOption: Option = {
-        id: Math.max(...options.map((o) => o.id), 0) + 1,
-        label: '',
-    };
 
     const handleLabelChange = () => {
         if (onLabelChange) {
@@ -31,7 +27,7 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
 
     const handleAddOption = () => {
         if (newOptionLabel.trim()) {
-            const newOption: Option = { id: options.length + 1, label: newOptionLabel };
+            const newOption: Option = { id: `${options.length + 1}`, label: newOptionLabel };
             if (onOptionsChange) {
                 onOptionsChange([...options, newOption]);
             }
@@ -81,7 +77,7 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
             )}
             <select
                 value={value}
-                onChange={(e) => onChange(parseInt(e.target.value, 10))}
+                onChange={(e) => onChange(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             >
                 {options.map((option, index) => (

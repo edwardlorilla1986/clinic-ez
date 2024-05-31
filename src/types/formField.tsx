@@ -9,30 +9,30 @@ interface BaseField {
     label: string;
 }
 
-interface TextField extends BaseField {
+export interface TextField extends BaseField {
     type: 'text';
     value: string;
 }
 
-interface NumberField extends BaseField {
+export interface NumberField extends BaseField {
     type: 'number';
     value: number;
 }
 
-interface CheckboxField extends BaseField {
+export interface CheckboxField extends BaseField {
     type: 'checkbox';
     options: Option[];
     value: string[];
 
 }
 
-interface MultipleChoiceField extends BaseField {
+export interface MultipleChoiceField extends BaseField {
     type: 'multiple-choice';
     options: Option[];
     value: string;
 }
 
-interface DropdownField extends BaseField {
+export interface DropdownField extends BaseField {
     type: 'dropdown';
     options: Option[];
     value: string;
