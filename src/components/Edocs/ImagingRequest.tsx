@@ -23,7 +23,7 @@ const Home: React.FC = () => {
 
     const handleAddField = (type: FormField["type"], sectionIndex?: number, options?: Option[], optionName?: string | undefined) => {
         let field: FormField;
-        const id = Date.now(); // Ensure id is a string
+        const id = Date.now();
 
         switch (type) {
             case 'text':

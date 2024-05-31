@@ -1,6 +1,7 @@
 export type Option = {
     id: string;
     label: string;
+    options?: Option[]
 }
 
 interface BaseField {

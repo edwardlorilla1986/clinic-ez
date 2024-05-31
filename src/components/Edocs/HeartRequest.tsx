@@ -23,8 +23,7 @@ const Home: React.FC = () => {
 
     const handleAddField = (type: FormField["type"], sectionIndex?: number, options: Option[] = [], optionName?: string) => {
         let field: FormField;
-        const id = Date.now(); // Ensure id is a string
-
+        const id = Date.now();
         switch (type) {
             case 'text':
                 field = { id, key: '', type: 'text', label: 'New Text Field', value: '' };
@@ -67,14 +66,31 @@ const Home: React.FC = () => {
     }, []);
 
     const handleAddEchocardiogramField = useCallback((payload: handleAddParams, sectionIndex?: number) => {
-        handleAddField('checkbox', sectionIndex,
+        handleAddField('multiple-choice', sectionIndex,
             [
-                { id: '1', label: '2D Echocardiogram', options: [{ id: '1-1', label: 'Plain' }, { id: '1-2', label: 'Doppler' }] },
-                { id: '2', label: 'Venous Duplex Scan (Upper)', options: [{ id: '2-1', label: 'R leg' }, { id: '2-2', label: 'L leg' }] },
-                { id: '3', label: 'DVT Screening', options: [{ id: '3-1', label: 'R leg' }, { id: '3-2', label: 'L leg' }] },
-                { id: '4', label: 'Arterial Duplex Scan (Upper)', options: [{ id: '4-1', label: 'R arm' }, { id: '4-2', label: 'L arm' }] },
-                { id: '5', label: 'Arterial Duplex Scan (Lower)', options: [{ id: '5-1', label: 'R leg' }, { id: '5-2', label: 'L leg' }] },
-            ], "Echocardiogram and Scans");
+                { id: '1-1', label: 'Plain' },
+                { id: '1-2', label: 'Doppler' },
+            ], "2D Echocardiogram");
+        handleAddField('multiple-choice', sectionIndex,
+            [
+                { id: '2-1', label: 'R leg' },
+                { id: '2-2', label: 'L leg' },
+            ], "Venous Duplex Scan (Upper)");
+        handleAddField('multiple-choice', sectionIndex,
+            [
+                { id: '3-1', label: 'R leg' },
+                { id: '3-2', label: 'L leg' },
+            ], "DVT Screening");
+        handleAddField('multiple-choice', sectionIndex,
+            [
+                { id: '4-1', label: 'R arm' },
+                { id: '4-2', label: 'L arm' },
+            ], "Arterial Duplex Scan (Upper)");
+        handleAddField('multiple-choice', sectionIndex,
+            [
+                { id: '5-1', label: 'R leg' },
+                { id: '5-2', label: 'L leg' },
+            ], "Arterial Duplex Scan (Lower)");
     }, []);
 
     useEffect(() => {
