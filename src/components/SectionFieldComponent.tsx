@@ -10,11 +10,13 @@ import { FormBuilderContextType, formBuilderContext } from "../context/FormBuild
 interface SectionFieldComponentProps {
   index: number;
   section: SectionField;
+  toolBar: React.ReactNode;
 }
 
 const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
   index,
   section,
+  toolBar
 }) => {
   const [isEditingLabel, setIsEditingLabel] = useState(false);
   const [newLabel, setNewLabel] = useState(section.label);
@@ -50,42 +52,12 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
           {section.label}
         </h2>
       )}
-      <div className="flex space-x-2 mb-4">
-        <button
-          className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField("text", index)}
-        >
-          Add Text Field
-        </button>
-        <button
-          className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField("number", index)}
-        >
-          Add Number Field
-        </button>
-        <button
-          className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField("checkbox", index)}
-        >
-          Add Checkbox Field
-        </button>
-        <button
-          className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField("multiple-choice", index)}
-        >
-          Add Multiple Choice Field
-        </button>
-        <button
-          className="bg-green-500 text-white py-1 px-3 rounded"
-          onClick={() => handleAddField("dropdown", index)}
-        >
-          Add Dropdown Field
-        </button>
-      </div>
+      {toolBar}
+      
       {section.child.map((subField, subIndex) => (
         <div
           key={subIndex}
-          className="mb-2 p-2 border rounded"
+          className="my-2 p-2 border rounded"
         >
           {subField.type === "text" && (
             <TextField
@@ -161,7 +133,7 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
           )}
           <button
             className="bg-red-500 text-white py-1 px-3 mt-2 rounded"
-            onClick={() => handleRemoveField(index, subIndex)}
+            onClick={() => handleRemoveField(subIndex, index)}
           >
             Remove Sub-Item
           </button>

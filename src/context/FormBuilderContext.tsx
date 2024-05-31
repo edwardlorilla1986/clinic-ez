@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FormAction, useFormBuilder } from "../hooks/useFormBuilder";
-import {FormField, FormStructure, Option, SectionField} from "../types/formField";
+import { CheckboxField, DropdownField, FormField, FormStructure, MultipleChoiceField, NumberField, Option, SectionField, TextField } from "../types/formField";
 
 interface FormBuilderProps {
     children: React.ReactNode;
@@ -20,6 +20,14 @@ export type FormBuilderContextType = {
     handleLabelChange: (index: number, label: string, sectionIndex?: number) => void;
     handleRemoveField: (index: number, sectionIndex?: number) => void;
     handleOptionsChange: (index: number, options: Option[], sectionIndex?: number) => void;
+    handleAddOption: (index: number, option: Option, sectionIndex?: number) => void;
+    handleRemoveOption: (index: number, optionId: Option["id"], sectionIndex?: number) => void;
+    addTextField: (textField: TextField, sectionIndex?: number) => void;
+    addNumberField: (numberField: NumberField, sectionIndex?: number) => void;
+    addCheckboxField: (checkboxField: CheckboxField, sectionIndex?: number) => void;
+    addMultipleChoiceField: (multipleChoiceField: MultipleChoiceField, sectionIndex?: number) => void;
+    addDropdownField: (dropdownField: DropdownField, sectionIndex?: number) => void;
+    addSectionField: (sectionField: SectionField, sectionIndex?: number) => void;
 }
 
 export const formBuilderContext = React.createContext<FormBuilderContextType | null>(null);
@@ -69,7 +77,7 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
             reader.readAsText(file);
         }
     };
-
+    
 
     const textField = {
         id: Date.now(),
@@ -131,7 +139,7 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         child: [],
         options: [],
     }
-
+    
     const handleAddField = (type: FormField["type"], sectionIndex?: number) => {
         dispatch({
             type: 'addField',
@@ -141,6 +149,7 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
             }
         });
     }
+    
 
     const handleFieldChange = (index: number, field: FormField, sectionIndex?: number) => {
         dispatch({
@@ -163,12 +172,19 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         });
     }
 
-
     const handleRemoveField = (index: number, sectionIndex?: number) => {
-       dispatch({ type: 'removeField', payload: { index, sectionIndex } });
+        console.log({index, sectionIndex});
+        
+        dispatch({
+            type: 'removeField',
+            payload: {
+                index,
+                sectionIndex
+            },
+        });
+    }
 
-    };
-    const handleOptionsChange = (index: number, options: Option[], sectionIndex?: number) => {
+    const handleOptionsChange = (index: number, options: Option[], sectionIndex?: number) => {        
         dispatch({
             type: 'updateField',
             payload: {
@@ -182,6 +198,97 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         });
     }
 
+    const handleAddOption = (index: number, option: Option, sectionIndex?: number) => {
+        const item = form.items[index];
+        const options = "options" in item ? [...item.options, option] : [option];
+        dispatch({
+            type: 'updateField',
+            payload: {
+                index,
+                sectionIndex,
+                field: {
+                    ...item,
+                    ...(["checkbox", "multiple-choice", "dropdown", "section"].includes(form.items[index].type) && { options })
+                },
+            },
+        });
+    }
+
+    const handleRemoveOption = (index: number, optionId: Option["id"], sectionIndex?: number) => {
+        const item = form.items[index];
+        const options = "options" in item ? item.options.filter((option) => option.id !== optionId) : [];
+        dispatch({
+            type: 'updateField',
+            payload: {
+                index,
+                sectionIndex,
+                field: {
+                    ...item,
+                    ...(["checkbox", "multiple-choice", "dropdown", "section"].includes(form.items[index].type) && { options })
+                },
+            },
+        });
+    }
+
+    const addTextField = (textField: TextField, sectionIndex?: number) => {
+        dispatch({
+            type: 'addField',
+            payload: {
+                field: textField,
+                sectionIndex,
+            },
+        });
+    }
+
+    const addNumberField = (numberField: NumberField, sectionIndex?: number) => {
+        dispatch({
+            type: 'addField',
+            payload: {
+                field: numberField,
+                sectionIndex,
+            },
+        });
+    }
+
+    const addCheckboxField = (checkboxField: CheckboxField, sectionIndex?: number) => {
+        dispatch({
+            type: 'addField',
+            payload: {
+                field: checkboxField,
+                sectionIndex,
+            },
+        });
+    }
+
+    const addMultipleChoiceField = (multipleChoiceField: MultipleChoiceField, sectionIndex?: number) => {
+        dispatch({
+            type: 'addField',
+            payload: {
+                field: multipleChoiceField,
+                sectionIndex,
+            },
+        });
+    }
+
+    const addDropdownField = (dropdownField: DropdownField, sectionIndex?: number) => {
+        dispatch({
+            type: 'addField',
+            payload: {
+                field: dropdownField,
+                sectionIndex,
+            },
+        });
+    }
+
+    const addSectionField = (sectionField: SectionField, sectionIndex?: number) => {
+        dispatch({
+            type: 'addField',
+            payload: {
+                field: sectionField,
+                sectionIndex,
+            },
+        });
+    }
 
 
   return <formBuilderContext.Provider value={{
@@ -196,6 +303,14 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         handleLabelChange,
         handleRemoveField,
         handleOptionsChange,
+        handleAddOption,
+        handleRemoveOption,
+        addTextField,
+        addNumberField,
+        addCheckboxField,
+        addMultipleChoiceField,
+        addDropdownField,
+        addSectionField,
 
   }}>{children}</formBuilderContext.Provider>;
 }

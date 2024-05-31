@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { SectionField, FormField } from "@/src/types/formField";
+import {FormField, SectionField, Option as OptionType, TextField as TextFieldType, NumberField as NumberFieldType, CheckboxField as CheckboxFieldType, MultipleChoiceField as MultipleChoiceFieldType, DropdownField as DropdownFieldType} from "@/src/types/formField";
 import TextField from "@/src/components/TextField";
 import RemoveButton from "@/src/components/Button/RemoveButton";
 import NumberField from "@/src/components/NumberField";
@@ -7,18 +6,17 @@ import CheckboxField from "@/src/components/CheckboxField";
 import MultipleChoiceField from "@/src/components/MultipleChoiceField";
 import DropdownField from "@/src/components/DropdownField";
 import SectionFieldComponent from "@/src/components/SectionFieldComponent";
+import React, { useContext } from "react";
 import { FormBuilderContextType, formBuilderContext } from "../context/FormBuilderContext";
-
-interface FormItemProps {
-    field: FormField;
-    index: number;
-    sectionIndex?: number; // Add sectionIndex if necessary
+interface FormItemProps{
+    field: FormField
+    index: number,
+    sectionToolbar?: React.ReactNode
 }
 
-function FormItem({ field, index, sectionIndex }: FormItemProps) {
-    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField, form } = useContext(formBuilderContext) as FormBuilderContextType;
-
-    const { label, type } = field;
+function FormItem({field, index, sectionToolbar}: FormItemProps) {
+    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField } = useContext(formBuilderContext) as FormBuilderContextType
+    const {label, type} = field
     let value, options;
 
     if (type === 'text' || type === 'number') {
@@ -29,41 +27,41 @@ function FormItem({ field, index, sectionIndex }: FormItemProps) {
     }
 
     return (
-        <div className="mb-4 p-4 border rounded-lg shadow">
+        <div className="flex flex-col my-2 p-4 border rounded-lg shadow">
             {type === 'text' && (
                 <TextField
                     label={label}
                     value={value as string}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
-                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
                 />
             )}
             {type === 'number' && (
                 <NumberField
                     label={label}
                     value={value as number}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
-                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
                 />
             )}
             {type === 'checkbox' && (
                 <CheckboxField
                     label={label}
                     options={options ?? []}
-                    value={value as string[]}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
-                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
-                    onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
+                    value={value as OptionType["id"][]}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
             )}
             {type === 'multiple-choice' && (
                 <MultipleChoiceField
                     label={label}
                     options={options ?? []}
-                    value={value as string}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
-                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
-                    onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
+                    value={value as OptionType["id"]}
+                    onChange={(value) => handleFieldChange(index, {...field, value,})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
             )}
             {type === 'dropdown' && (
@@ -71,20 +69,20 @@ function FormItem({ field, index, sectionIndex }: FormItemProps) {
                     label={label}
                     options={options ?? []}
                     value={value as string}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
-                    onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
-                    onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value})}
+                    onLabelChange={(label) => handleLabelChange(index, label)}
+                    onOptionsChange={(options) => handleOptionsChange(index, options)}
                 />
             )}
             {type === 'section' && (
                 <SectionFieldComponent
                     index={index}
                     section={field as SectionField}
+                    toolBar={sectionToolbar}
                 />
             )}
-            <RemoveButton onClick={() => handleRemoveField(index, sectionIndex)} />
+            <RemoveButton onClick={() => handleRemoveField(index)}/>
         </div>
     );
 }
-
-export default FormItem;
+export default FormItem

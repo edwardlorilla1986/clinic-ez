@@ -48,6 +48,8 @@ function formReducer(state: FormStructure, action: FormAction): FormStructure {
                     ...state,
                     items: state.items.map((item, index) => {
                         if (index === action.payload.sectionIndex && 'child' in item) {
+                            console.log(action.payload.field);
+                            
                             return {
                                 ...item,
                                 child: item.child.map((child, childIndex) => childIndex === action.payload.index ? action.payload.field : child),
