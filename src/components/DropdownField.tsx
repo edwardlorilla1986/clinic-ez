@@ -61,7 +61,7 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
     };
 
     return (
-        <div className="mb-4">
+        <div className="mb-4 space-y-2">
             {isEditingLabel ? (
                 <div className="flex items-center">
                     <input
@@ -107,15 +107,15 @@ const DropdownField: React.FC<DropdownFieldProps> = ({ label, options, value, on
                     )}
                 </div>
             ))}
-            <div className="flex items-center mt-2">
+            <div className="flex items-center gap-2">
                 <input
                     type="text"
                     value={newOptionLabel}
                     onChange={(e) => setNewOptionLabel(e.target.value)}
                     placeholder="New option"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                <button className="ml-2 bg-green-500 text-white py-1 px-3 rounded" onClick={handleAddOption}>Add Option</button>
+                <button disabled={!newOptionLabel} className="disabled:bg-gray-400 bg-green-500 text-white py-1 px-3 rounded" onClick={handleAddOption}>Add Option</button>
             </div>
         </div>
     );
