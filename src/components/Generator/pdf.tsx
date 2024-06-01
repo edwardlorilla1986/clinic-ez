@@ -115,7 +115,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
     };
 
     return (
-        <div>
+        <>
             <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
                 <div ref={hiddenContentRef}>
                     <div id="page1-div" style={{ position: 'relative', width: '918px', height: '1187px' }}>
@@ -202,7 +202,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
             </div>
 
             <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={generatePDF}>Generate PDF</button>
-        </div>
+        </>
     );
 };
 

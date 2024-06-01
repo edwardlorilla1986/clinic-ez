@@ -15,9 +15,10 @@ interface FormItemProps {
     sectionIndex?: number;
     sectionToolbar?: React.ReactNode;
     handleRemoveFieldWithCheckboxUpdate?: (index: number, sectionIndex?: number) => void;
+    showRemoveButton?: boolean;
 }
 
-function FormItem({ field, index, sectionToolbar, sectionIndex, handleRemoveFieldWithCheckboxUpdate }: FormItemProps) {
+function FormItem({ field, index, showRemoveButton, sectionToolbar, sectionIndex, handleRemoveFieldWithCheckboxUpdate }: FormItemProps) {
     const { handleFieldChange, handleLabelChange, handleOptionsChange } = useContext(formBuilderContext) as FormBuilderContextType;
     const { label, type } = field;
     let value, options;
@@ -84,7 +85,9 @@ function FormItem({ field, index, sectionToolbar, sectionIndex, handleRemoveFiel
                     toolBar={sectionToolbar}
                 />
             )}
-            <RemoveButton onClick={() => handleRemoveFieldWithCheckboxUpdate?.(index, sectionIndex)} />
+            {showRemoveButton && (
+                <RemoveButton onClick={() => handleRemoveFieldWithCheckboxUpdate?.(index, sectionIndex)}  />
+            )}
         </div>
     );
 }

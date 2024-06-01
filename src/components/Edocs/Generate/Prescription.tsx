@@ -6,6 +6,8 @@ import FormItem from '@/src/components/FormItem';
 import { FormField } from '@/src/types/formField';
 import { initialState } from '@/src/hooks/useFormBuilder';
 import { useRouter } from "next/navigation";
+import PdfGenerator from "@/src/components/Generator/pdf";
+import RemoveButton from "@/src/components/Button/RemoveButton";
 
 const Home: React.FC = () => {
     const { handleFieldChange, duplicateItems, handleAddField, handleOptionsChange, handleRemoveField, form, dispatch, handleExport, handleImport } = useContext(formBuilderContext) as FormBuilderContextType;
@@ -53,14 +55,14 @@ const Home: React.FC = () => {
             </div>
 
             <div className="mb-6">
-                <button className="ml-1 bg-blue-500 text-white py-2 px-4 rounded"
+                <button className="mr-1 bg-blue-500 text-white py-2 px-4 rounded"
                         onClick={handleAddMedicine}>
                     Add Medicine
                 </button>
-                <button className="ml-1 bg-green-500 text-white py-2 px-4 rounded" onClick={handleExport}>
+                <button className="mr-1 bg-green-500 text-white py-2 px-4 rounded" onClick={handleExport}>
                     Export Form
                 </button>
-                <button className="ml-1 bg-green-500 text-white py-2 px-4 rounded"
+                <button className="mr-1 bg-green-500 text-white py-2 px-4 rounded"
                         onClick={() => fileInputRef.current?.click()}>
                     Import Form
                 </button>
@@ -71,17 +73,23 @@ const Home: React.FC = () => {
                     ref={fileInputRef}
                     onChange={handleImport}
                 />
+                 {form?.items.length > 0 ? <PdfGenerator data={form}/> : null}
+
+
 
             </div>
 
             {form?.items.map((item, index) => (
                 <div key={item.id} className="mb-8 p-6 bg-gray-100 border rounded-lg shadow-md">
-                {item.type === 'section' &&
+                    {item.type === 'section' &&
                         item.child.map((supItem, supIndex) => (
-                            <FormItem key={supIndex} index={supIndex} field={supItem} sectionIndex={index} />
+                            <FormItem key={`${item.id}-${supIndex}`} index={supIndex} field={supItem} sectionIndex={index} showRemoveButton={false} />
                         ))}
+                    <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveField?.(index)} />
                 </div>
             ))}
+
+
         </div>
     );
 };
