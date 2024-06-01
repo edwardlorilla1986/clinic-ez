@@ -34,7 +34,7 @@ const Home: React.FC = () => {
             <button className="mt-2 bg-blue-500 text-white py-2 px-4 rounded" onClick={goToEdoc}>
                 Back
             </button>
-            <h1 className="text-3xl font-bold mb-6 text-gray-800">e-Prescription Builder</h1>
+            <h1 className="text-3xl font-bold mb-6 text-gray-800">Generate e-Prescription for Patient A</h1>
             <div className="mb-6">
                 <input
                     type="text"
@@ -74,36 +74,47 @@ const Home: React.FC = () => {
                     onChange={handleImport}
                 />
                  {form?.items.length > 0 ? <PdfGenerator data={form}/> : null}
-
-
-
             </div>
-
-            {form?.items.map((item, index) => (
-                <div key={item.id} className="mb-8 p-6 bg-gray-100 border rounded-lg shadow-md">
-                    { item.key == "brand_name" || item.key == "quantity"  || item.key == "generic" ?
-                        <div className="flex" >
-                            {item.type === 'section' &&
-                                item.child.map((supItem, supIndex) => (
-                                    <div key={item.id}>
-
-                                        <div>
-                                            <label htmlFor={item.key}>{supItem.label}</label>
-                                            <input type="text" id={item.key}/>
-                                        </div>
-
-
-                                    </div>
-                                ))}
-                        </div> : null
+            {
+                form?.items.map((item, index) => {
+                    if (item.type === 'section') {
+                        return (
+                            <div key={index} className="flex flex-wrap gap-2 my-10 shadow-2xl rounded p-5 border-2">
+                                {
+                                   item.child.map((child, childIndex) => {
+                                        if (child.key === "brand_name") return (
+                                            <div key={child.id} className='flex flex-col flex-1'>
+                                                <label htmlFor={child.key}>{child.label}</label>
+                                                <input type="text" id={child.key}/>
+                                            </div>
+                                        )
+                                        if (child.key === "generic_name") return (
+                                            <div key={child.id} className='flex flex-col flex-1'>
+                                                <label htmlFor={child.key}>{child.label}</label>
+                                                <input type="text" id={child.key}/>
+                                            </div>
+                                        )
+                                        if (child.key === "quantity") return (
+                                            <div key={child.id} className='flex flex-col flex-1'>
+                                                <label htmlFor={child.key}>{child.label}</label>
+                                                <input  className='w-full' type="text" id={child.key}/>
+                                            </div>
+                                        )
+                                        if (child.key === "sig") return (
+                                            <div key={child.id} className='flex gap-2 items-center basis-full'>
+                                                <label htmlFor={child.key}>{child.label}</label>
+                                                <input className='w-full' type="text" id={child.key}/>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        );
                     }
+                    return <div key={index}>a</div>
 
-
-                    <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveField?.(index)}/>
-                </div>
-            ))}
-
-
+                })
+            }
         </div>
     );
 };
