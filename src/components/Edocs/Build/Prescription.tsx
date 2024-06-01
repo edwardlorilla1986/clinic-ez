@@ -156,8 +156,8 @@ const Home: React.FC = () => {
                             <input
                                 type="checkbox"
                                 className="mr-2"
-                                checked={!!checkboxState['interval']}
-                                onChange={(e) => handleToggleField('text', index, 'interval', 'Sig', e.target.checked)}
+                                checked={!!checkboxState['sig']}
+                                onChange={(e) => handleToggleField('text', index, 'sig', 'Sig', e.target.checked)}
                             />
                             Add Sig
                         </label>

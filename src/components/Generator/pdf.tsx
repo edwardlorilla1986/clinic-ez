@@ -170,7 +170,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
                             const brandNameValue = _item.child.find(c => c.key === "brand_name")?.value;
                             const genericNameValue = _item.child.find(c => c.key === "generic_name")?.value;
                             const quantityNameValue = _item.child.find(c => c.key === "quantity")?.value;
-                            const intervalNameValue = _item.child.find(c => c.key === "interval")?.value;
+                            const sigNameValue = _item.child.find(c => c.key === "sig")?.value;
                             const tabletNameValue = _item.child.find(c => c.key === "tablet")?.value;
                             const genericName = genericNameValue ? `(${genericNameValue})` : null;
                             const quantityName = quantityNameValue !== undefined ? `#${quantityNameValue} tablet/s` : null;
@@ -186,7 +186,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
                                                 {index + 1}.
                                             </p>
                                             <p style={{ position: 'absolute', top: `${457 + (index * 70)}px`, left: '151px', whiteSpace: 'nowrap', ...styles.ft18 }}>
-                                                <b>sig:&#160;</b> {intervalNameValue}
+                                                <b>sig:&#160;</b> {sigNameValue}
                                             </p>
                                         </>
                                     )}
