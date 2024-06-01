@@ -105,10 +105,6 @@ const Home: React.FC = () => {
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
             </div>
-            <button className="mt-1 bg-blue-500 text-white py-2 px-4 rounded"
-                    onClick={() => handleAddField('section')}>
-                Add Field
-            </button>
             <div className="mb-6">
                 <button className="bg-green-500 text-white py-2 px-4 rounded" onClick={handleExport}>
                     Export Form
