@@ -3,7 +3,7 @@
 import React, { useEffect, useCallback, useContext, useRef, useState } from 'react';
 import { formBuilderContext, FormBuilderContextType } from '@/src/context/FormBuilderContext';
 import { useRouter } from 'next/navigation';
-import PdfGenerator from '@/src/components/Generator/pdf';
+import PdfGenerator from '@/src/components/Generator/LaboratoryRequest';
 import RemoveButton from '@/src/components/Button/RemoveButton';
 
 const Home: React.FC = () => {
