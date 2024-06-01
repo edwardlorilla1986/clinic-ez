@@ -106,7 +106,7 @@ const Home: React.FC = () => {
                 />
             </div>
             <div className="mb-6">
-                <button className="bg-green-500 text-white py-2 px-4 rounded" onClick={handleExport}>
+                <button className="mr-1 bg-green-500 text-white py-2 px-4 rounded" onClick={handleExport}>
                     Export Form
                 </button>
                 <button className="bg-green-500 text-white py-2 px-4 rounded"
@@ -174,8 +174,7 @@ const Home: React.FC = () => {
 
                     {item.type === 'section' &&
                         item.child.map((supItem, supIndex) => (
-                            <FormItem key={supIndex} index={supIndex} field={supItem} sectionIndex={index}
-                                      handleRemoveFieldWithCheckboxUpdate={handleRemoveFieldWithCheckboxUpdate}/>
+                            <FormItem key={supIndex} index={supIndex} field={supItem} sectionIndex={index}/>
                         ))}
                 </div>
             ))}

@@ -81,11 +81,25 @@ const Home: React.FC = () => {
 
             {form?.items.map((item, index) => (
                 <div key={item.id} className="mb-8 p-6 bg-gray-100 border rounded-lg shadow-md">
-                    {item.type === 'section' &&
-                        item.child.map((supItem, supIndex) => (
-                            <FormItem key={`${item.id}-${supIndex}`} index={supIndex} field={supItem} sectionIndex={index} showRemoveButton={false} />
-                        ))}
-                    <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveField?.(index)} />
+                    { item.key == "brand_name" || item.key == "quantity"  || item.key == "generic" ?
+                        <div className="flex" >
+                            {item.type === 'section' &&
+                                item.child.map((supItem, supIndex) => (
+                                    <div key={item.id}>
+
+                                        <div>
+                                            <label htmlFor={item.key}>{supItem.label}</label>
+                                            <input type="text" id={item.key}/>
+                                        </div>
+
+
+                                    </div>
+                                ))}
+                        </div> : null
+                    }
+
+
+                    <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveField?.(index)}/>
                 </div>
             ))}
 
