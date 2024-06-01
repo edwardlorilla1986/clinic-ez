@@ -14,7 +14,54 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+/* Custom Checkbox */
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+}
 
-input {
-  @apply p-2 ring-1 ring-gray-300 rounded-md;
+.custom-checkbox span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 2px solid #000;
+  border-radius: 50%;
+  margin-right: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + span {
+  background-color: #00BCD4;
+  border: none;
+}
+
+/* Custom Radio Button */
+.custom-radio input[type="radio"] {
+  display: none;
+}
+
+.custom-radio span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 2px solid #000;
+  border-radius: 50%;
+  margin-right: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-radio input[type="radio"]:checked + span {
+  background-color: #00BCD4;
+  border: none;
+}
+.section-title {
+  background-color: #B2EBF2;
+  color: #000;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px;
 }
