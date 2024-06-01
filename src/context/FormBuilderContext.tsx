@@ -14,6 +14,7 @@ export type FormBuilderContextType = {
     handleTitleChange: (title: string) => void;
     handleDescriptionChange: (description: string) => void;
     handleExport: () => void;
+    duplicateItems: (items: FormField[]) =>  FormField[];
     handleImport: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleAddField: (type: FormField["type"], sectionIndex?: number) => void;
     handleFieldChange: (index: number, field: FormField, sectionIndex?: number) => void;
@@ -47,7 +48,17 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
             payload: title,
         });
     };
-
+    const duplicateItems = (items: FormField[]): FormField[] => {
+        return items.map(item => {
+            const newItem = {
+                child: [],
+                ...item, id: Date.now() + Math.random() };
+            if (item.type === 'section' && item.child) {
+                newItem.child = duplicateItems(item.child);
+            }
+            return newItem;
+        });
+    };
     const handleDescriptionChange = (description: string) => {
         dispatch({
             type: 'setDescription',
@@ -301,6 +312,7 @@ export default function FormBuilderProvider({ children}: FormBuilderProps) {
         handleDescriptionChange,
         handleExport,
         handleImport,
+      duplicateItems,
         handleAddField,
         handleFieldChange,
         handleLabelChange,
