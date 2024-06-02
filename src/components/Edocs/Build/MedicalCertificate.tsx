@@ -1,10 +1,10 @@
 'use client';
+
 import React, { useEffect, useCallback, useContext, useRef, useState } from 'react';
 import { formBuilderContext, FormBuilderContextType } from '@/src/context/FormBuilderContext';
 import FormItem from '@/src/components/FormItem';
-import { FormField } from '@/src/types/formField';
+import { FormField, Option } from '@/src/types/formField';
 import { initialState } from '@/src/hooks/useFormBuilder';
-import { Option } from '@/src/types/formField';
 import { useRouter } from "next/navigation";
 
 const Home: React.FC = () => {
@@ -78,6 +78,14 @@ const Home: React.FC = () => {
         router.push('/edoc');
     };
 
+    const handleSubmit = () => {
+        const savedGenerates = localStorage.getItem('builds');
+        const generates = savedGenerates ? JSON.parse(savedGenerates) : [];
+        generates.push({...form, key: 'laboratory-request'});
+        localStorage.setItem('builds', JSON.stringify(generates));
+        alert('Form saved!');
+    };
+
     if (!form) {
         return <div className="text-center py-10 text-gray-500">Loading...</div>;
     }
@@ -113,6 +121,9 @@ const Home: React.FC = () => {
             <div className="flex justify-end space-x-2 mb-6">
                 <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 shadow-md" onClick={handleExport}>
                     Export Form
+                </button>
+                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 shadow-md" onClick={() => fileInputRef.current?.click()}>
+                    Import Form
                 </button>
                 <input
                     type="file"
@@ -277,6 +288,12 @@ const Home: React.FC = () => {
                     ))}
                 </div>
             ))}
+
+            <div className="flex justify-end">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleSubmit}>
+                    Submit
+                </button>
+            </div>
         </div>
     );
 };

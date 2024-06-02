@@ -1,10 +1,10 @@
 'use client';
+
 import React, { useEffect, useCallback, useContext, useRef, useState } from 'react';
 import { formBuilderContext, FormBuilderContextType } from '@/src/context/FormBuilderContext';
 import FormItem from '@/src/components/FormItem';
-import { FormField } from '@/src/types/formField';
+import { FormField, Option } from '@/src/types/formField';
 import { initialState } from '@/src/hooks/useFormBuilder';
-import { Option } from '@/src/types/formField';
 import { useRouter } from "next/navigation";
 
 const Home: React.FC = () => {
@@ -76,6 +76,14 @@ const Home: React.FC = () => {
 
     const goToEdoc = () => {
         router.push('/edoc');
+    };
+
+    const handleSubmit = () => {
+        const savedGenerates = localStorage.getItem('builds');
+        const generates = savedGenerates ? JSON.parse(savedGenerates) : [];
+        generates.push({...form, key: 'heart-request'});
+        localStorage.setItem('builds', JSON.stringify(generates));
+        alert('Form saved!');
     };
 
     if (!form) {
@@ -215,6 +223,12 @@ const Home: React.FC = () => {
                     ))}
                 </div>
             ))}
+
+            <div className="flex justify-end">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleSubmit}>
+                    Submit
+                </button>
+            </div>
         </div>
     );
 };

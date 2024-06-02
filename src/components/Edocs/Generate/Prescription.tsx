@@ -31,7 +31,7 @@ const Home: React.FC = () => {
     const handleSubmit = () => {
         const savedGenerates = localStorage.getItem('generates');
         const generates = savedGenerates ? JSON.parse(savedGenerates) : [];
-        generates.push(form);
+        generates.push({...form, key: "prescription"});
         localStorage.setItem('generates', JSON.stringify(generates));
         alert('Form saved!');
     };

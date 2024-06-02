@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect, useCallback, useContext } from 'react';
 import FormBuilderProvider, { formBuilderContext, FormBuilderContextType } from '@/src/context/FormBuilderContext';
 import FormItem from '@/src/components/FormItem';
@@ -52,7 +53,6 @@ const Home: React.FC = () => {
     };
 
     const handleAddAssessmentField = useCallback((payload: handleAddParams, sectionIndex?: number) => {
-
         handleAddField('multiple-choice', sectionIndex, [
             { id: '1', label: 'Yes' },
             { id: '2', label: 'No' },
@@ -81,6 +81,14 @@ const Home: React.FC = () => {
         dispatch({ type: 'setForm', payload: initialState });
         handleAddField('section');
     }, []);
+
+    const handleSubmit = () => {
+        const savedGenerates = localStorage.getItem('generates');
+        const generates = savedGenerates ? JSON.parse(savedGenerates) : [];
+        generates.push({...form, key: 'imaging-request'});
+        localStorage.setItem('generates', JSON.stringify(generates));
+        alert('Form saved!');
+    };
 
     if (!form) {
         return <div>Loading...</div>;
@@ -123,6 +131,12 @@ const Home: React.FC = () => {
                     }
                 </div>
             ))}
+
+            <div className="flex justify-end mt-6">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleSubmit}>
+                    Submit
+                </button>
+            </div>
         </div>
     );
 };
