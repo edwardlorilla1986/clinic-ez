@@ -78,6 +78,14 @@ const Home: React.FC = () => {
         router.push('/edoc');
     };
 
+    const handleSubmit = () => {
+        const savedBuilds = localStorage.getItem('builds');
+        const builds = savedBuilds ? JSON.parse(savedBuilds) : [];
+        builds.push({...form, key: "prescription"});
+        localStorage.setItem('builds', JSON.stringify(builds));
+        alert('Form saved!');
+    };
+
     if (!form) {
         return <div className="text-center py-10">Loading...</div>;
     }
@@ -178,6 +186,9 @@ const Home: React.FC = () => {
                         ))}
                 </div>
             ))}
+            <button className="mt-2 bg-blue-500 text-white py-2 px-4 rounded" onClick={handleSubmit}>
+                Submit
+            </button>
         </div>
     );
 };

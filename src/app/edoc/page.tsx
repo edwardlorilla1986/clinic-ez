@@ -8,7 +8,11 @@ import Edoc from "@/src/components/Edocs/Edoc";
 
 
 const Home: React.FC = () => {
-    return (<Edoc />
+    return (
+        <FormBuilderProvider>
+            <Edoc />
+        </FormBuilderProvider>
+
     );
 };
 

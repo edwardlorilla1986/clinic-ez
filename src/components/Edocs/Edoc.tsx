@@ -1,22 +1,36 @@
 'use client'
-import { useState, ChangeEvent, FormEvent, MouseEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 const Edoc = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState('');
-    const [selectedButton, setSelectedButton] = useState('generate');
+    const [selectedButton, setSelectedButton] = useState('');
+    const [builds, setBuilds] = useState<any[]>([]);
+    const [generates, setGenerates] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState('build');
     const router = useRouter();
 
-    const handleBuildClick = () => {
-        setSelectedButton('build')
-        setIsDialogOpen(true);
+    useEffect(() => {
+        const savedBuilds = localStorage.getItem('builds');
+        const savedGenerates = localStorage.getItem('generates');
+        if (savedBuilds) {
+            setBuilds(JSON.parse(savedBuilds));
+        }
+        if (savedGenerates) {
+            setGenerates(JSON.parse(savedGenerates));
+        }
+        setIsLoading(false);
+    }, []);
 
+    const handleOpenDialog = (type: string) => {
+        setSelectedButton(type);
+        setIsDialogOpen(true);
     };
 
-    const handleGenerateClick = () => {
-        setSelectedButton('generate')
-        setIsDialogOpen(true);
+    const handleTabClick = (tab: string) => {
+        setActiveTab(tab);
     };
 
     const handleSubmit = (e: FormEvent) => {
@@ -36,19 +50,58 @@ const Edoc = () => {
         setSelectedRequest(e.target.value);
     };
 
+    const handleView = (item: any) => {
+        alert(`Title: ${item.title}\nDescription: ${item.description}`);
+    };
+
+    const handleDelete = (index: number, type: string) => {
+        if (type === 'build') {
+            const updatedBuilds = [...builds];
+            updatedBuilds.splice(index, 1);
+            setBuilds(updatedBuilds);
+            localStorage.setItem('builds', JSON.stringify(updatedBuilds));
+        } else if (type === 'generate') {
+            const updatedGenerates = [...generates];
+            updatedGenerates.splice(index, 1);
+            setGenerates(updatedGenerates);
+            localStorage.setItem('generates', JSON.stringify(updatedGenerates));
+        }
+    };
+
+    const handleGenerate = (build: any) => {
+        localStorage.setItem('selectedBuild', JSON.stringify(build));
+        if (!build.key) {
+            return;
+        }
+        router.push(`edoc/generate/${build.key}`);
+    };
+
     return (
-        <div className="bg-gray-100 flex items-center justify-center min-h-screen">
-            <div className="space-x-4">
+        <div className="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+            <div className="flex space-x-4 mb-4">
                 <button
-                    value={'build'}
-                    onClick={handleBuildClick}
+                    className={`px-4 py-2 rounded ${activeTab === 'build' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    onClick={() => handleTabClick('build')}
+                >
+                    Build
+                </button>
+                <button
+                    className={`px-4 py-2 rounded ${activeTab === 'generate' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    onClick={() => handleTabClick('generate')}
+                >
+                    Generate
+                </button>
+            </div>
+
+            <div className="space-x-4 mb-4">
+                <button
+                    onClick={() => handleOpenDialog('build')}
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                     Build
                 </button>
                 <button
-                    value={'generate'}
-                    onClick={handleGenerateClick}
+                    onClick={() => handleOpenDialog('generate')}
                     className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
                 >
                     Generate
@@ -99,7 +152,6 @@ const Edoc = () => {
                                     type="radio"
                                     name="requestType"
                                     value={`/edoc/${selectedButton}/prescription`}
-
                                     className="mr-2"
                                     onChange={handleRadioChange}
                                 />
@@ -115,6 +167,100 @@ const Edoc = () => {
                     </div>
                 </div>
             )}
+
+            <div className="container mx-auto p-4">
+                {activeTab === 'build' && (
+                    <>
+                        <h2 className="text-2xl mb-4">List of Builds</h2>
+                        {isLoading ? (
+                            <p className="text-gray-700">Loading builds...</p>
+                        ) : builds.length === 0 ? (
+                            <p className="text-gray-700">No builds found.</p>
+                        ) : (
+                            <table className="min-w-full bg-white border border-gray-200">
+                                <thead>
+                                <tr>
+                                    <th className="py-2 px-4 border-b">Title</th>
+                                    <th className="py-2 px-4 border-b">Description</th>
+                                    <th className="py-2 px-4 border-b">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {builds.map((build, index) => (
+                                    <tr key={index}>
+                                        <td className="py-2 px-4 border-b">{build.title}</td>
+                                        <td className="py-2 px-4 border-b">{build.description}</td>
+                                        <td className="py-2 px-4 border-b">
+                                            <button
+                                                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                                                onClick={() => handleView(build)}
+                                            >
+                                                View
+                                            </button>
+                                            <button
+                                                className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-600"
+                                                onClick={() => handleDelete(index, 'build')}
+                                            >
+                                                Delete
+                                            </button>
+                                            <button
+                                                className="bg-green-500 text-white px-2 py-1 rounded ml-2 hover:bg-green-600"
+                                                onClick={() => handleGenerate(build)}
+                                            >
+                                                Generate
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </>
+                )}
+
+                {activeTab === 'generate' && (
+                    <>
+                        <h2 className="text-2xl mb-4">List of Generates</h2>
+                        {isLoading ? (
+                            <p className="text-gray-700">Loading generates...</p>
+                        ) : generates.length === 0 ? (
+                            <p className="text-gray-700">No generates found.</p>
+                        ) : (
+                            <table className="min-w-full bg-white border border-gray-200">
+                                <thead>
+                                <tr>
+                                    <th className="py-2 px-4 border-b">Title</th>
+                                    <th className="py-2 px-4 border-b">Description</th>
+                                    <th className="py-2 px-4 border-b">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {generates.map((generate, index) => (
+                                    <tr key={index}>
+                                        <td className="py-2 px-4 border-b">{generate.title}</td>
+                                        <td className="py-2 px-4 border-b">{generate.description}</td>
+                                        <td className="py-2 px-4 border-b">
+                                            <button
+                                                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                                                onClick={() => handleView(generate)}
+                                            >
+                                                View
+                                            </button>
+                                            <button
+                                                className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-600"
+                                                onClick={() => handleDelete(index, 'generate')}
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </>
+                )}
+            </div>
         </div>
     );
 };

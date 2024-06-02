@@ -11,6 +11,14 @@ const Home: React.FC = () => {
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        const selectedBuild = localStorage.getItem('selectedBuild');
+        if (selectedBuild) {
+            dispatch({ type: 'setForm', payload: JSON.parse(selectedBuild) });
+            localStorage.removeItem('selectedBuild');
+        }
+    }, [dispatch]);
+
     const goToEdoc = () => {
         router.push('/edoc');
     };
@@ -18,6 +26,14 @@ const Home: React.FC = () => {
     const handleAddMedicine = () => {
         const duplicatedItems = duplicateItems(form.items);
         dispatch({ type: 'setForm', payload: { ...form, items: [...form.items, ...duplicatedItems] } });
+    };
+
+    const handleSubmit = () => {
+        const savedGenerates = localStorage.getItem('generates');
+        const generates = savedGenerates ? JSON.parse(savedGenerates) : [];
+        generates.push(form);
+        localStorage.setItem('generates', JSON.stringify(generates));
+        alert('Form saved!');
     };
 
     if (!form) {
@@ -97,6 +113,12 @@ const Home: React.FC = () => {
                 }
                 return <div key={index} className="mb-6">a</div>;
             })}
+
+            <div className="flex justify-end">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleSubmit}>
+                    Submit
+                </button>
+            </div>
         </div>
     );
 };

@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useCallback, useContext, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import { formBuilderContext, FormBuilderContextType } from '@/src/context/FormBuilderContext';
 import { useRouter } from 'next/navigation';
 import PdfGenerator from '@/src/components/Generator/LaboratoryRequest';
 import RemoveButton from '@/src/components/Button/RemoveButton';
 
 const Home: React.FC = () => {
-    const { handleFieldChange, duplicateItems, handleAddField, handleOptionsChange, handleRemoveField, form, dispatch, handleExport, handleImport } = useContext(formBuilderContext) as FormBuilderContextType;
+    const { handleFieldChange, duplicateItems, handleAddField, handleRemoveField, form, dispatch, handleExport, handleImport } = useContext(formBuilderContext) as FormBuilderContextType;
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -23,6 +23,14 @@ const Home: React.FC = () => {
     if (!form) {
         return <div className="text-center py-10 text-gray-500">Loading...</div>;
     }
+
+    const renderOptionsInRows = (options: { id: string, label: string }[]) => {
+        const rows = [];
+        for (let i = 0; i < options.length; i += 8) {
+            rows.push(options.slice(i, i + 8));
+        }
+        return rows;
+    };
 
     return (
         <div className="container mx-auto p-8 bg-white shadow-xl rounded-lg">
@@ -73,74 +81,46 @@ const Home: React.FC = () => {
 
             {form?.items.length > 0 && <PdfGenerator data={form} />}
 
-            {form?.items.map((item, index) => (
-                <div key={item.id} className="mb-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow my-3">
-                    <div className="flex">
-                        <div className="flex flex-col flex-1">
-                            {item?.type === 'section' && item?.child?.map((supItem, supIndex) => (
-                                supItem.type === 'checkbox' && (
-                                    <div key={supItem.id} className="flex flex-col mb-2">
-                                        <label className="section-title text-sm font-semibold text-gray-700 mb-2">{supItem.label}</label>
-                                        {supItem.options.map(option => (
-                                            <label key={option.id} className="flex items-center mb-2">
-                                                <span className="custom-checkbox">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={supItem.value.includes(option.id)}
-                                                        onChange={(e) => {
-                                                            const newValue = e.target.checked
-                                                                ? [...supItem.value, option.id]
-                                                                : supItem.value.filter(val => val !== option.id);
-                                                            handleFieldChange(supIndex, {
-                                                                ...supItem,
-                                                                value: newValue
-                                                            }, index);
-                                                        }}
-                                                    />
-                                                    <span></span>
-                                                </span>
-                                                {option.label}
-                                            </label>
-                                        ))}
-                                    </div>
-                                )
-                            ))}
-                        </div>
-                        <div className="flex flex-col flex-1 mb-4">
+            <div >
+                {form?.items.map((item, index) => (
+                    <div key={item.id} className="mb-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow my-3 ">
+                        <div className="masonry-grid " style={{ columnCount: 2, columnGap: '1rem' }}>
                             {item?.type === 'section' && item?.child?.map((supItem, supIndex) => (
                                 supItem.type === 'multiple-choice' && (
-                                    <div key={supItem.id} className="flex flex-col mb-2">
-
+                                    <div key={supItem.id} className="break-inside-avoid flex flex-col mb-2">
                                         <label className="section-title text-sm font-semibold text-gray-700 ml-1">{supItem.label}</label>
-
-                                        {supItem.options.map(option => (
-                                            <label key={option.id} className="flex items-center">
-                                                <span className="custom-radio">
-                                                    <input
-                                                        type="radio"
-                                                        name={supItem.key}
-                                                        checked={supItem.value === option.id}
-                                                        onChange={() => handleFieldChange(supIndex, {
-                                                            ...supItem,
-                                                            value: option.id
-                                                        }, index)}
-                                                    />
-                                                    <span></span>
-                                                </span>
-                                                {option.label}
-                                            </label>
+                                        {renderOptionsInRows(supItem.options).map((row, rowIndex) => (
+                                            <div key={rowIndex} className="flex flex-wrap">
+                                                {row.map((option: { id: string, label: string }) => (
+                                                    <label key={option.id} className="flex items-center mb-2 w-1/2">
+                                                        <span className="custom-radio">
+                                                            <input
+                                                                type="radio"
+                                                                name={supItem.key}
+                                                                checked={supItem.value === option.id}
+                                                                onChange={() => handleFieldChange(supIndex, {
+                                                                    ...supItem,
+                                                                    value: option.id
+                                                                }, index)}
+                                                            />
+                                                            <span></span>
+                                                        </span>
+                                                        {option.label}
+                                                    </label>
+                                                ))}
+                                            </div>
                                         ))}
                                     </div>
                                 )
                             ))}
                         </div>
-                    </div>
 
-                    <div className="flex justify-end mt-4">
-                        <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveField(index)} />
+                        <div className="flex justify-end mt-4">
+                            <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveField(index)} />
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 };

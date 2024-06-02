@@ -24,7 +24,6 @@ export interface CheckboxField extends BaseField {
     type: 'checkbox';
     options: Option[];
     value: string[];
-
 }
 
 export interface MultipleChoiceField extends BaseField {
