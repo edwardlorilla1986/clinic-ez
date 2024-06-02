@@ -79,20 +79,7 @@ const Edoc = () => {
     return (
         <div className="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-6">
             <div className="w-full max-w-4xl">
-                <div className="flex space-x-4 mb-8 border-b">
-                    <button
-                        className={`px-6 py-2 font-semibold ${activeTab === 'build' ? 'border-b-4 border-blue-500 text-blue-500' : 'text-gray-700'}`}
-                        onClick={() => handleTabClick('build')}
-                    >
-                        Build
-                    </button>
-                    <button
-                        className={`px-6 py-2 font-semibold ${activeTab === 'generate' ? 'border-b-4 border-green-500 text-green-500' : 'text-gray-700'}`}
-                        onClick={() => handleTabClick('generate')}
-                    >
-                        Generate
-                    </button>
-                </div>
+
 
                 <div className="space-x-4 mb-8">
                     <button
@@ -108,7 +95,20 @@ const Edoc = () => {
                         Generate
                     </button>
                 </div>
-
+                <div className="flex space-x-4 mb-8 border-b">
+                    <button
+                        className={`px-6 py-2 font-semibold ${activeTab === 'build' ? 'border-b-4 border-blue-500 text-blue-500' : 'text-gray-700'}`}
+                        onClick={() => handleTabClick('build')}
+                    >
+                        Build
+                    </button>
+                    <button
+                        className={`px-6 py-2 font-semibold ${activeTab === 'generate' ? 'border-b-4 border-green-500 text-green-500' : 'text-gray-700'}`}
+                        onClick={() => handleTabClick('generate')}
+                    >
+                        Generate
+                    </button>
+                </div>
                 {isDialogOpen && (
                     <div
                         id="dialog"
