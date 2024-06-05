@@ -81,7 +81,7 @@ const Home: React.FC = () => {
     const handleSubmit = () => {
         const savedGenerates = localStorage.getItem('builds');
         const generates = savedGenerates ? JSON.parse(savedGenerates) : [];
-        generates.push({...form, key: 'laboratory-request'});
+        generates.push({...form, key: 'laboratory-request', id: Date.now() + Math.random()});
         localStorage.setItem('builds', JSON.stringify(generates));
         alert('Form saved!');
     };

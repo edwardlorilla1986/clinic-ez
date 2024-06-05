@@ -20,84 +20,13 @@ type handleAddParams = {
 
 const Home: React.FC = () => {
     const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField, form, dispatch } = useContext(formBuilderContext) as FormBuilderContextType;
-
-    const handleAddField = (type: FormField["type"], sectionIndex?: number, options: Option[] = [], optionName?: string) => {
-        let field: FormField;
-        const id = Date.now();
-        switch (type) {
-            case 'text':
-                field = { id, key: '', type: 'text', label: 'New Text Field', value: '' };
-                break;
-            case 'number':
-                field = { id, key: '', type: 'number', label: 'New Number Field', value: 0 };
-                break;
-            case 'checkbox':
-                field = { id, key: '', type: 'checkbox', label: optionName || 'New Checkbox Field', value: [], options: options };
-                break;
-            case 'multiple-choice':
-                field = { id, key: '', type: 'multiple-choice', label: optionName || 'New Multiple Choice Field', value: '', options: options };
-                break;
-            case 'dropdown':
-                field = { id, key: '', type: 'dropdown', label: optionName || 'New Dropdown Field', value: '', options: options };
-                break;
-            case 'section':
-                field = { options: [], id, key: '', type: 'section', label: optionName || 'New Section', child: [] };
-                break;
-            default:
-                throw new Error('Unknown field type');
-        }
-
-        dispatch({ type: 'addField', payload: { field, sectionIndex } });
-    };
-
-    const handleAddCardiovascularProceduresField = useCallback((payload: handleAddParams, sectionIndex?: number) => {
-        handleAddField('checkbox', sectionIndex,
-            [
-                { id: '1', label: '12 Lead ECG' },
-                { id: '2', label: '15 Lead ECG' },
-                { id: '3', label: 'Stress Test' },
-                { id: '4', label: '24 Holter Monitoring' },
-                { id: '5', label: '24 Ambulatory BP' },
-                { id: '6', label: 'Carotid Scan' },
-                { id: '7', label: 'Transesophageal Echocardiogram (TEE)' },
-                { id: '8', label: 'Stress Echo' },
-                { id: '9', label: 'Dobutamine Stress Test' },
-            ], "Cardiovascular Procedures");
-    }, []);
-
-    const handleAddEchocardiogramField = useCallback((payload: handleAddParams, sectionIndex?: number) => {
-        handleAddField('multiple-choice', sectionIndex,
-            [
-                { id: '1-1', label: 'Plain' },
-                { id: '1-2', label: 'Doppler' },
-            ], "2D Echocardiogram");
-        handleAddField('multiple-choice', sectionIndex,
-            [
-                { id: '2-1', label: 'R leg' },
-                { id: '2-2', label: 'L leg' },
-            ], "Venous Duplex Scan (Upper)");
-        handleAddField('multiple-choice', sectionIndex,
-            [
-                { id: '3-1', label: 'R leg' },
-                { id: '3-2', label: 'L leg' },
-            ], "DVT Screening");
-        handleAddField('multiple-choice', sectionIndex,
-            [
-                { id: '4-1', label: 'R arm' },
-                { id: '4-2', label: 'L arm' },
-            ], "Arterial Duplex Scan (Upper)");
-        handleAddField('multiple-choice', sectionIndex,
-            [
-                { id: '5-1', label: 'R leg' },
-                { id: '5-2', label: 'L leg' },
-            ], "Arterial Duplex Scan (Lower)");
-    }, []);
-
     useEffect(() => {
-        dispatch({ type: 'setForm', payload: initialState });
-        handleAddField('section');
-    }, []);
-
+        const selectedBuild = localStorage.getItem('selectedBuild');
+        if (selectedBuild) {
+            dispatch({ type: 'setForm', payload: JSON.parse(selectedBuild) });
+            localStorage.removeItem('selectedBuild');
+        }
+    }, [dispatch]);
     const handleSubmit = () => {
         const savedGenerates = localStorage.getItem('generates');
         const generates = savedGenerates ? JSON.parse(savedGenerates) : [];
@@ -129,16 +58,7 @@ const Home: React.FC = () => {
 
             {form?.items.map((item, index) => (
                 <div key={item.id} className="mb-8 p-6 border rounded-lg shadow my-3">
-                    <div className="flex flex-wrap gap-4 mb-6 mt-4">
-                        <button className="bg-blue-500 text-white py-2 px-4 rounded shadow-md hover:bg-blue-600 transition duration-300"
-                                onClick={() => handleAddCardiovascularProceduresField({ formId: item.id, type: 'multiple-choice', key: "cardiovascular_procedures" }, index)}>
-                            Add Cardiovascular Procedures
-                        </button>
-                        <button className="bg-green-500 text-white py-2 px-4 rounded shadow-md hover:bg-green-600 transition duration-300"
-                                onClick={() => handleAddEchocardiogramField({ formId: item.id, type: 'multiple-choice', key: "echocardiogram" }, index)}>
-                            Add Echocardiogram and Scans
-                        </button>
-                    </div>
+
                     {
                         item?.type === 'section' &&
                         item?.child?.map((supItem, supIndex) => {
@@ -150,7 +70,7 @@ const Home: React.FC = () => {
 
             <div className="flex justify-end mt-6">
                 <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleSubmit}>
-                    Submit
+                    Save
                 </button>
             </div>
         </div>

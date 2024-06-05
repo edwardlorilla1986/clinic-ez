@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useRef } from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import { formBuilderContext, FormBuilderContextType } from '@/src/context/FormBuilderContext';
 import { useRouter } from 'next/navigation';
 import PdfGenerator from '@/src/components/Generator/LaboratoryRequest';
@@ -10,7 +10,13 @@ const Home: React.FC = () => {
     const { handleFieldChange, duplicateItems, handleAddField, handleRemoveField, form, dispatch, handleExport, handleImport } = useContext(formBuilderContext) as FormBuilderContextType;
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
-
+    useEffect(() => {
+        const selectedBuild = localStorage.getItem('selectedBuild');
+        if (selectedBuild) {
+            dispatch({ type: 'setForm', payload: JSON.parse(selectedBuild) });
+            localStorage.removeItem('selectedBuild');
+        }
+    }, [dispatch]);
     const goToEdoc = () => {
         router.push('/edoc');
     };
@@ -132,7 +138,7 @@ const Home: React.FC = () => {
 
             <div className="flex justify-end mt-6">
                 <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleSubmit}>
-                    Submit
+                    Save
                 </button>
             </div>
         </div>

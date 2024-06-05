@@ -46,7 +46,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
                         format: [918, 1187]
                     });
                     pdf.addImage(imgData, 'PNG', 0, 0, 918, 1187);
-                    pdf.save('e-prescription.pdf');
+                    pdf.save('e-laboratory-request.pdf');
                 })
                 .catch((error: string) => {
                     console.error('Error generating image for PDF:', error);

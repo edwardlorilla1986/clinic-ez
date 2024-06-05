@@ -81,7 +81,7 @@ const Home: React.FC = () => {
     const handleSubmit = () => {
         const savedBuilds = localStorage.getItem('builds');
         const builds = savedBuilds ? JSON.parse(savedBuilds) : [];
-        builds.push({...form, key: "prescription"});
+        builds.push({...form, key: "prescription", id: Date.now() + Math.random() });
         localStorage.setItem('builds', JSON.stringify(builds));
         alert('Form saved!');
     };
@@ -116,10 +116,6 @@ const Home: React.FC = () => {
             <div className="mb-6">
                 <button className="mr-1 bg-green-500 text-white py-2 px-4 rounded" onClick={handleExport}>
                     Export Form
-                </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded"
-                        onClick={() => fileInputRef.current?.click()}>
-                    Import Form
                 </button>
                 <input
                     type="file"

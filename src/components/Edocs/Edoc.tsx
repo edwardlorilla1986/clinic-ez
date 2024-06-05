@@ -1,11 +1,27 @@
 'use client';
-import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import {type} from "node:os";
 
 const Edoc = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState('');
     const [selectedButton, setSelectedButton] = useState('');
+    const [patientId, setPatientId] = useState<string>("1");
+    const [selectedFilterBuild, setSelectedFilterBuild] = useState('');
+    const [selectedRadioButton, setSelectedRadioButton] = useState('');
+    const [patients, setPatients] = useState([
+        {
+            label: "John Doe",
+            id: 1
+        },
+        {
+            label: "Jane Doe",
+            id: 2
+        }
+    ]);
+    let [filterBuilds, setFilterBuilds] = useState<any[]>([]);
+    let [selectedBuild, setSelectedBuild] = useState<string>();
     const [builds, setBuilds] = useState<any[]>([]);
     const [generates, setGenerates] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +52,8 @@ const Edoc = () => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (selectedRequest) {
-            router.push(selectedRequest);
+
+            router.push(selectedRequest + "&build=" + selectedFilterBuild);
         }
     };
 
@@ -46,9 +63,27 @@ const Edoc = () => {
         }
     };
 
+
+
     const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedRequest(e.target.value);
+        setSelectedRadioButton( e.target.value)
+        var _filterBuilds = localStorage.getItem('builds')
+        if(_filterBuilds){
+            setFilterBuilds( JSON.parse(_filterBuilds).filter((c: any) => c.key ==  e.target.value) as any[]);
+        }
+
+
+        if(selectedButton == 'generate'){
+            setSelectedRequest(`/edoc/${selectedButton}/` + e.target.value + "?patientId=" + patientId  );
+        }else{
+            setSelectedRequest(`/edoc/${selectedButton}/` + e.target.value)
+        }
+
     };
+
+    const onFilterBuild = (e: ChangeEvent<HTMLInputElement>) => {
+        setSelectedFilterBuild(e.target.value)
+    }
 
     const handleView = (item: any) => {
         alert(`Title: ${item.title}\nDescription: ${item.description}`);
@@ -118,11 +153,26 @@ const Edoc = () => {
                         <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
                             <h2 className="text-xl font-semibold mb-4">Select Request Type</h2>
                             <form onSubmit={handleSubmit} className="space-y-4">
+                                {selectedButton == "generate" ?
+                                    <select
+                                        value={patientId}
+                                        onChange={(e) => {
+                                            setPatientId(e.target.value)
+                                        }}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                    >
+                                        {patients.map((option, index) => (
+                                            <option key={index} value={option.id}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select> : null
+                                }
                                 <label className="flex items-center">
                                     <input
                                         type="radio"
                                         name="requestType"
-                                        value={`/edoc/${selectedButton}/heart-request`}
+                                        value={`heart-request`}
                                         className="mr-2"
                                         onChange={handleRadioChange}
                                     />
@@ -132,7 +182,7 @@ const Edoc = () => {
                                     <input
                                         type="radio"
                                         name="requestType"
-                                        value={`/edoc/${selectedButton}/imaging-request`}
+                                        value={`imaging-request`}
                                         className="mr-2"
                                         onChange={handleRadioChange}
                                     />
@@ -142,7 +192,7 @@ const Edoc = () => {
                                     <input
                                         type="radio"
                                         name="requestType"
-                                        value={`/edoc/${selectedButton}/laboratory-request`}
+                                        value={`laboratory-request`}
                                         className="mr-2"
                                         onChange={handleRadioChange}
                                     />
@@ -152,12 +202,34 @@ const Edoc = () => {
                                     <input
                                         type="radio"
                                         name="requestType"
-                                        value={`/edoc/${selectedButton}/prescription`}
+                                        value={`prescription`}
                                         className="mr-2"
                                         onChange={handleRadioChange}
                                     />
                                     Prescription
                                 </label>
+
+                                {
+                                    <fieldset>
+                                        {
+                                            filterBuilds.map((c: any, index: number) => {
+                                                return <label key={index} className="flex items-center">
+                                                    <input
+                                                        type="radio"
+                                                        name="selectBuild"
+                                                        value={c.id}
+                                                        className="mr-2"
+                                                        onChange={onFilterBuild}
+                                                    />
+                                                    {c.title}
+                                                </label>
+                                            })
+                                        }
+                                    </fieldset>
+
+                                }
+
+
                                 <button
                                     type="submit"
                                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
