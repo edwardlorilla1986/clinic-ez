@@ -52,8 +52,12 @@ const Edoc = () => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (selectedRequest) {
-
+            var build = localStorage.getItem('builds')
             router.push(selectedRequest + "&build=" + selectedFilterBuild);
+            var _build = (JSON.stringify(JSON.parse(build as string).find((c: any) => {
+                return c.id ==  selectedFilterBuild
+            })) )
+            localStorage.setItem('selectedBuild', _build);
         }
     };
 
@@ -71,8 +75,6 @@ const Edoc = () => {
         if(_filterBuilds){
             setFilterBuilds( JSON.parse(_filterBuilds).filter((c: any) => c.key ==  e.target.value) as any[]);
         }
-
-
         if(selectedButton == 'generate'){
             setSelectedRequest(`/edoc/${selectedButton}/` + e.target.value + "?patientId=" + patientId  );
         }else{
@@ -209,23 +211,28 @@ const Edoc = () => {
                                     Prescription
                                 </label>
 
-                                {
-                                    <fieldset>
+                                { filterBuilds.length > 0 ?
+                                    <fieldset className="border border-gray-300 p-4 rounded">
                                         {
                                             filterBuilds.map((c: any, index: number) => {
-                                                return <label key={index} className="flex items-center">
-                                                    <input
-                                                        type="radio"
-                                                        name="selectBuild"
-                                                        value={c.id}
-                                                        className="mr-2"
-                                                        onChange={onFilterBuild}
-                                                    />
-                                                    {c.title}
-                                                </label>
+                                                return (
+                                                    <label key={index} className="flex items-center mb-2">
+                                                        <input
+                                                            type="radio"
+                                                            name="selectBuild"
+                                                            value={c.id}
+                                                            className="mr-2"
+                                                            onChange={onFilterBuild}
+                                                        />
+                                                        {c.title}
+                                                    </label>
+                                                )
                                             })
                                         }
+                                    </fieldset> :   <fieldset className="border border-gray-300 p-4 rounded">
+                                        No build yet!
                                     </fieldset>
+
 
                                 }
 

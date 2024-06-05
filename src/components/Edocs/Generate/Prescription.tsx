@@ -15,7 +15,6 @@ const Home: React.FC = () => {
         const selectedBuild = localStorage.getItem('selectedBuild');
         if (selectedBuild) {
             dispatch({ type: 'setForm', payload: JSON.parse(selectedBuild) });
-            localStorage.removeItem('selectedBuild');
         }
     }, [dispatch]);
 

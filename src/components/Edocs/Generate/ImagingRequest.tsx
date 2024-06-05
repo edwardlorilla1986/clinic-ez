@@ -20,14 +20,13 @@ type handleAddParams = {
 };
 
 const Home: React.FC = () => {
-    const { handleFieldChange, handleLabelChange, handleOptionsChange, handleRemoveField, form, dispatch } = useContext(formBuilderContext) as FormBuilderContextType;
+    const { form, dispatch } = useContext(formBuilderContext) as FormBuilderContextType;
 
 
     useEffect(() => {
         const selectedBuild = localStorage.getItem('selectedBuild');
         if (selectedBuild) {
             dispatch({ type: 'setForm', payload: JSON.parse(selectedBuild) });
-            localStorage.removeItem('selectedBuild');
         }
     }, [dispatch]);
 
