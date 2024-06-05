@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import jsPDF from 'jspdf';
 // @ts-ignore
 import domtoimage from 'dom-to-image';
-import {FormStructure} from "@/src/types/formField";
+import {FormField, FormStructure} from "@/src/types/formField";
 
 interface ChildItem {
     id: number;
@@ -132,7 +132,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
         splitIntoPages();
     };
 
-    const renderItems = (items: SectionItem[], startIndex: number) => {
+    const renderItems = (items: FormField[], startIndex: number) => {
         return items.map((item, index) => {
             const uniqueKey = `${startIndex + index}-${item.id}`;
             var _item = item as SectionItem
