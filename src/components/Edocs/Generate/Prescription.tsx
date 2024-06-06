@@ -10,12 +10,21 @@ const Home: React.FC = () => {
     const { handleFieldChange, duplicateItems, handleAddField, handleOptionsChange, handleRemoveField, form, dispatch, handleExport, handleImport } = useContext(formBuilderContext) as FormBuilderContextType;
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
-
+    const [selectedPatientId, setSelectedPatientId] = useState<string>()
     useEffect(() => {
         const selectedBuild = localStorage.getItem('selectedBuild');
+        const _selectedPatientId = localStorage.getItem('selectedPatientId') as string;
         if (selectedBuild) {
             dispatch({ type: 'setForm', payload: JSON.parse(selectedBuild) });
         }
+
+        if(_selectedPatientId){
+            setSelectedPatientId(_selectedPatientId)
+
+
+
+        }
+
     }, [dispatch]);
 
     const goToEdoc = () => {

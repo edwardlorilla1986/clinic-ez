@@ -53,11 +53,16 @@ const Edoc = () => {
         e.preventDefault();
         if (selectedRequest) {
             var build = localStorage.getItem('builds')
-            router.push(selectedRequest + "&build=" + selectedFilterBuild);
-            var _build = (JSON.stringify(JSON.parse(build as string).find((c: any) => {
-                return c.id ==  selectedFilterBuild
-            })) )
-            localStorage.setItem('selectedBuild', _build);
+            if(selectedButton == 'build') {
+                router.push(selectedRequest);
+            }else{
+                router.push(selectedRequest + "&build=" + selectedFilterBuild);
+                var _build = (JSON.stringify(JSON.parse(build as string).find((c: any) => {
+                    return c.id ==  selectedFilterBuild
+                })) )
+                localStorage.setItem('selectedBuild', _build);
+            }
+
         }
     };
 
@@ -229,9 +234,9 @@ const Edoc = () => {
                                                 )
                                             })
                                         }
-                                    </fieldset> :   <fieldset className="border border-gray-300 p-4 rounded">
+                                    </fieldset> : selectedButton == "generate" ?  <fieldset className="border border-gray-300 p-4 rounded">
                                         No build yet!
-                                    </fieldset>
+                                    </fieldset> : null
 
 
                                 }

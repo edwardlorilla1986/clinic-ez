@@ -77,12 +77,9 @@ const Home: React.FC = () => {
                 <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleAddMedicine}>
                     Add Medicine
                 </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 shadow-md" onClick={handleExport}>
-                    Export Certificate
-                </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 shadow-md" onClick={() => fileInputRef.current?.click()}>
-                    Import Certificate
-                </button>
+               <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 shadow-md" onClick={() => fileInputRef.current?.click()}>
+                    Import
+               </button>
                 <input
                     type="file"
                     accept="application/json"
