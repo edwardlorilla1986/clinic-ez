@@ -7,7 +7,7 @@ import PdfGenerator from '@/src/components/Generator/LaboratoryRequest';
 import RemoveButton from '@/src/components/Button/RemoveButton';
 
 const Home: React.FC = () => {
-    const { handleFieldChange, duplicateItems, handleAddField, handleRemoveField, form, dispatch, handleExport, handleImport } = useContext(formBuilderContext) as FormBuilderContextType;
+    const { handleFieldChange, duplicateItems, renderOptionsInRows, handleRemoveField, form, dispatch, handleExport, handleImport,  } = useContext(formBuilderContext) as FormBuilderContextType;
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
@@ -36,14 +36,6 @@ const Home: React.FC = () => {
     if (!form) {
         return <div className="text-center py-10 text-gray-500">Loading...</div>;
     }
-
-    const renderOptionsInRows = (options: { id: string, label: string }[]) => {
-        const rows = [];
-        for (let i = 0; i < options.length; i += 8) {
-            rows.push(options.slice(i, i + 8));
-        }
-        return rows;
-    };
 
     return (
         <div className="container mx-auto p-8 bg-white shadow-xl rounded-lg">

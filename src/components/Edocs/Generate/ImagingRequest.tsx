@@ -9,7 +9,7 @@ import PdfGenerator from "@/src/components/Generator/LaboratoryRequest";
 import {useRouter} from "next/navigation";
 
 const Home: React.FC = () => {
-    const { form, dispatch, duplicateItems, handleImport, handleRemoveField } = useContext(formBuilderContext) as FormBuilderContextType;
+    const { form, dispatch, handleFieldChange, renderOptionsInRows, duplicateItems, handleImport, handleRemoveField } = useContext(formBuilderContext) as FormBuilderContextType;
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
     useEffect(() => {
@@ -94,18 +94,48 @@ const Home: React.FC = () => {
             </div>
             {form?.items.length > 0 && <PdfGenerator data={form} />}
             {form?.items.map((item, index) => (
-                <div key={item.id} className="mb-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow my-3">
-                    {item?.type === 'section' && item?.child?.map((supItem, supIndex) => (
-                        <FormItem key={supIndex} index={supIndex} field={supItem} sectionIndex={index} />
-                    ))}
+                <div key={item.id} className="mb-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow my-3 ">
+                    <div className="masonry-grid " style={{columnCount: 2, columnGap: '1rem'}}>
+                        {item?.type === 'section' && item?.child?.map((supItem, supIndex) => (
+                            supItem.type === 'multiple-choice' && (
+                                <div key={supItem.id} className="break-inside-avoid flex flex-col mb-2">
+                                    <label
+                                        className="section-title text-sm font-semibold text-gray-700 ml-1">{supItem.label}</label>
+                                    {renderOptionsInRows(supItem.options).map((row, rowIndex) => (
+                                        <div key={rowIndex} className="flex flex-wrap">
+                                            {row.map((option: { id: string, label: string }) => (
+                                                <label key={option.id} className="flex items-center mb-2 w-1/2">
+                                                        <span className="custom-radio">
+                                                            <input
+                                                                type="radio"
+                                                                name={supItem.key}
+                                                                checked={supItem.value === option.id}
+                                                                onChange={() => handleFieldChange(supIndex, {
+                                                                    ...supItem,
+                                                                    value: option.id
+                                                                }, index)}
+                                                            />
+                                                            <span></span>
+                                                        </span>
+                                                    {option.label}
+                                                </label>
+                                            ))}
+                                        </div>
+                                    ))}
+                                </div>
+                            )
+                        ))}
+                    </div>
+
                     <div className="flex justify-end mt-4">
-                        <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveInitialField(index)} />
+                        <RemoveButton key={`remove-${item.id}`} onClick={() => handleRemoveField(index)}/>
                     </div>
                 </div>
             ))}
 
             <div className="flex justify-end mt-6">
-                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md" onClick={handleSubmit}>
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 shadow-md"
+                        onClick={handleSubmit}>
                     Save
                 </button>
             </div>
