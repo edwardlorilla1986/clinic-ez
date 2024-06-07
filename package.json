@@ -20,7 +20,7 @@
   },
   "optionalDependencies": {
     "@next/swc-win32-x64-msvc": "^15.0.0-rc.0"
-  }
+  },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
