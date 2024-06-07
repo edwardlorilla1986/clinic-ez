@@ -17,7 +17,13 @@ export type FormBuilderContextType = {
     duplicateItems: (items: FormField[]) => FormField[];
     handleImport: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleAddField: (type: FormField["type"], sectionIndex?: number) => void;
-    handleFieldChange: (index: number, field: FormField, sectionIndex?: number) => void;
+    handleFieldChange: (index: number, field: {
+        id: number;
+        label: string;
+        type: "text" | "number" | "checkbox" | "multiple-choice" | "dropdown" | "section";
+        value: string;
+        key: string
+    }, sectionIndex?: number) => void;
     handleLabelChange: (index: number, label: string, sectionIndex?: number) => void;
     handleRemoveField: (index: number, sectionIndex?: number) => void;
     handleOptionsChange: (index: number, options: Option[], sectionIndex?: number) => void;

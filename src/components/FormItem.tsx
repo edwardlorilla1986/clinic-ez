@@ -36,7 +36,7 @@ function FormItem({ field, index, showRemoveButton, sectionToolbar, sectionIndex
                 <TextField
                     label={label}
                     value={value as string}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value}, sectionIndex)}
                     onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
                 />
             )}
@@ -44,7 +44,7 @@ function FormItem({ field, index, showRemoveButton, sectionToolbar, sectionIndex
                 <NumberField
                     label={label}
                     value={value as number}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value}, sectionIndex)}
                     onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
                 />
             )}
@@ -53,7 +53,7 @@ function FormItem({ field, index, showRemoveButton, sectionToolbar, sectionIndex
                     label={label}
                     options={options ?? []}
                     value={value as OptionType["id"][]}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value}, sectionIndex)}
                     onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
                     onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
                 />
@@ -63,7 +63,7 @@ function FormItem({ field, index, showRemoveButton, sectionToolbar, sectionIndex
                     label={label}
                     options={options ?? []}
                     value={value as OptionType["id"]}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value}, sectionIndex)}
                     onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
                     onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
                 />
@@ -73,7 +73,7 @@ function FormItem({ field, index, showRemoveButton, sectionToolbar, sectionIndex
                     label={label}
                     options={options ?? []}
                     value={value as string}
-                    onChange={(value) => handleFieldChange(index, { ...field, value }, sectionIndex)}
+                    onChange={(value) => handleFieldChange(index, {...field, value}, sectionIndex)}
                     onLabelChange={(label) => handleLabelChange(index, label, sectionIndex)}
                     onOptionsChange={(options) => handleOptionsChange(index, options, sectionIndex)}
                 />

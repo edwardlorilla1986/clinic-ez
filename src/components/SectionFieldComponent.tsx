@@ -64,10 +64,10 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               label={subField.label}
               value={subField.value}
               onChange={(value) =>
-                handleFieldChange(index, { ...subField, value }, subIndex)
+                handleFieldChange(index, {...subField, value}, subIndex)
               }
               onLabelChange={(label) =>
-                handleFieldChange(index, { ...subField, label }, subIndex)
+                handleFieldChange(index, {...subField, label}, subIndex)
               }
             />
           )}
@@ -76,10 +76,10 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               label={subField.label}
               value={subField.value}
               onChange={(value) =>
-                handleFieldChange(index, { ...subField, value }, subIndex)
+                handleFieldChange(index, {...subField, value}, subIndex)
               }
               onLabelChange={(label) =>
-                handleFieldChange(index, { ...subField, label }, subIndex)
+                handleFieldChange(index, {...subField, label}, subIndex)
               }
             />
           )}
@@ -89,13 +89,13 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               options={subField?.options ?? []}
               value={subField.value}
               onChange={(value) =>
-                handleFieldChange(index, { ...subField, value }, subIndex)
+                handleFieldChange(index, {...subField, value}, subIndex)
               }
               onLabelChange={(label) =>
-                handleFieldChange(index, { ...subField, label }, subIndex)
+                handleFieldChange(index, {...subField, label}, subIndex)
               }
               onOptionsChange={(options) =>
-                handleFieldChange(index, { ...subField, options }, subIndex)
+                handleFieldChange(index, {...subField, options}, subIndex)
               }
             />
           )}
@@ -105,13 +105,13 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               options={subField.options}
               value={subField.value}
               onChange={(value) =>
-                handleFieldChange(index, { ...subField, value }, subIndex)
+                handleFieldChange(index, {...subField, value}, subIndex)
               }
               onLabelChange={(label) =>
-                handleFieldChange(index, { ...subField, label }, subIndex)
+                handleFieldChange(index, {...subField, label}, subIndex)
               }
               onOptionsChange={(options) =>
-                handleFieldChange(index, { ...subField, options }, subIndex)
+                handleFieldChange(index, {...subField, options}, subIndex)
               }
             />
           )}
@@ -121,13 +121,13 @@ const SectionFieldComponent: React.FC<SectionFieldComponentProps> = ({
               options={subField?.options ?? []}
               value={subField.value}
               onChange={(value) =>
-                handleFieldChange(index, { ...subField, value }, subIndex)
+                handleFieldChange(index, {...subField, value}, subIndex)
               }
               onLabelChange={(label) =>
-                handleFieldChange(index, { ...subField, label }, subIndex)
+                handleFieldChange(index, {...subField, label}, subIndex)
               }
               onOptionsChange={(options) =>
-                handleFieldChange(index, { ...subField, options }, subIndex)
+                handleFieldChange(index, {...subField, options}, subIndex)
               }
             />
           )}

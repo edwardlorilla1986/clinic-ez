@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import PdfGenerator from "@/src/components/Generator/Prescription";
 import RemoveButton from "@/src/components/Button/RemoveButton";
 
-const Home: React.FC = () => {
+const Prescription: React.FC = () => {
     const { handleFieldChange, duplicateItems, handleAddField, handleOptionsChange, handleRemoveField, form, dispatch, handleExport, handleImport } = useContext(formBuilderContext) as FormBuilderContextType;
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -104,6 +104,7 @@ const Home: React.FC = () => {
                                     <input
                                         type="text"
                                         id={child.key}
+                                        //@ts-ignore
                                         value={child.value}
                                         onChange={(e) => handleFieldChange(childIndex, { ...child, value: e.target.value }, index)}
                                         className="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -128,4 +129,4 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default Prescription;
