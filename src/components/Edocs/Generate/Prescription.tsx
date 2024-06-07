@@ -106,7 +106,10 @@ const Prescription: React.FC = () => {
                                         id={child.key}
                                         //@ts-ignore
                                         value={child.value}
-                                        onChange={(e) => handleFieldChange(childIndex, { ...child, value: e.target.value }, index)}
+                                        onChange={(e) => handleFieldChange(childIndex, {
+                                            ...child,
+                                            value: e.target.value
+                                        }, index)}
                                         className="mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                     />
                                 </div>

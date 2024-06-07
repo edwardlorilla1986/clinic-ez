@@ -21,7 +21,7 @@ export type FormBuilderContextType = {
         id: number;
         label: string;
         type: "text" | "number" | "checkbox" | "multiple-choice" | "dropdown" | "section";
-        value: string;
+        value: string | number | string[];
         key: string
     }, sectionIndex?: number) => void;
     handleLabelChange: (index: number, label: string, sectionIndex?: number) => void;
