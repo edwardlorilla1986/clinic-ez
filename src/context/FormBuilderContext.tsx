@@ -2,7 +2,17 @@
 
 import React, { useEffect } from "react";
 import { FormAction, useFormBuilder } from "../hooks/useFormBuilder";
-import { CheckboxField, DropdownField, FormField, FormStructure, MultipleChoiceField, NumberField, Option, SectionField, TextField } from "../types/formField";
+import {
+    CheckboxField,
+    DropdownField,
+    FormField,
+    FormStructure,
+    MultipleChoiceField,
+    NumberField,
+    Option,
+    SectionField,
+    TextField,
+} from "../types/formField";
 
 interface FormBuilderProps {
     children: React.ReactNode;
@@ -17,13 +27,11 @@ export type FormBuilderContextType = {
     duplicateItems: (items: FormField[]) => FormField[];
     handleImport: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleAddField: (type: FormField["type"], sectionIndex?: number) => void;
-    handleFieldChange: (index: number, field: {
-        id: number;
-        label: string;
-        type: "text" | "number" | "checkbox" | "multiple-choice" | "dropdown" | "section";
-        value: string | number | string[];
-        key: string
-    }, sectionIndex?: number) => void;
+    handleFieldChange: (
+        index: number,
+        field: FormField,
+        sectionIndex?: number
+    ) => void;
     handleLabelChange: (index: number, label: string, sectionIndex?: number) => void;
     handleRemoveField: (index: number, sectionIndex?: number) => void;
     handleOptionsChange: (index: number, options: Option[], sectionIndex?: number) => void;
@@ -32,13 +40,18 @@ export type FormBuilderContextType = {
     addTextField: (textField: TextField, sectionIndex?: number) => void;
     addNumberField: (numberField: NumberField, sectionIndex?: number) => void;
     addCheckboxField: (checkboxField: CheckboxField, sectionIndex?: number) => void;
-    addMultipleChoiceField: (multipleChoiceField: MultipleChoiceField, sectionIndex?: number) => void;
+    addMultipleChoiceField: (
+        multipleChoiceField: MultipleChoiceField,
+        sectionIndex?: number
+    ) => void;
     addDropdownField: (dropdownField: DropdownField, sectionIndex?: number) => void;
     addSectionField: (sectionField: SectionField, sectionIndex?: number) => void;
     renderOptionsInRows: (options: { id: string; label: string }[]) => { id: string; label: string }[][];
 };
 
-export const formBuilderContext = React.createContext<FormBuilderContextType | null>(null);
+export const formBuilderContext = React.createContext<FormBuilderContextType | null>(
+    null
+);
 
 export default function FormBuilderProvider({ children }: FormBuilderProps) {
     const [form, dispatch] = useFormBuilder();
@@ -57,7 +70,7 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
     const duplicateItems = (items: FormField[]): FormField[] => {
         return items.map((item) => {
             const newItem = {
-                child: [],
+                child: undefined,
                 ...item,
                 id: Date.now() + Math.random(),
             };
@@ -102,38 +115,38 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
         }
     };
 
-    const textField = {
+    const textField: TextField = {
         id: Date.now(),
         key: "",
-        type: "text" as "text",
+        type: "text",
         label: "New Text Field",
         value: "",
     };
 
-    const numberField = {
+    const numberField: NumberField = {
         id: Date.now(),
         key: "",
-        type: "number" as "number",
+        type: "number",
         label: "New Number Field",
         value: 0,
     };
 
-    const checkboxField = {
+    const checkboxField: CheckboxField = {
         id: Date.now(),
         key: "",
-        type: "checkbox" as "checkbox",
+        type: "checkbox",
         label: "New Checkbox Field",
-        value: [] as string[],
+        value: [],
         options: [
             { id: "1", label: "Option 1" },
             { id: "2", label: "Option 2" },
         ],
     };
 
-    const multipleChoiceField = {
+    const multipleChoiceField: MultipleChoiceField = {
         id: Date.now(),
         key: "",
-        type: "multiple-choice" as "multiple-choice",
+        type: "multiple-choice",
         label: "New Multiple Choice Field",
         value: "",
         options: [
@@ -142,10 +155,10 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
         ],
     };
 
-    const dropdownField = {
+    const dropdownField: DropdownField = {
         id: Date.now(),
         key: "",
-        type: "dropdown" as "dropdown",
+        type: "dropdown",
         label: "New Dropdown Field",
         value: "",
         options: [
@@ -154,10 +167,10 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
         ],
     };
 
-    const sectionField = {
+    const sectionField: SectionField = {
         id: Date.now(),
         key: "",
-        type: "section" as "section",
+        type: "section",
         label: "New Section",
         child: [],
         options: [],
@@ -184,14 +197,22 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
         });
     };
 
-    const handleFieldChange = (index: number, field: FormField, sectionIndex?: number) => {
+    const handleFieldChange = (
+        index: number,
+        field: FormField,
+        sectionIndex?: number
+    ) => {
         dispatch({
             type: "updateField",
             payload: { index, field, sectionIndex },
         });
     };
 
-    const handleLabelChange = (index: number, label: string, sectionIndex?: number) => {
+    const handleLabelChange = (
+        index: number,
+        label: string,
+        sectionIndex?: number
+    ) => {
         dispatch({
             type: "updateField",
             payload: {
@@ -215,7 +236,11 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
         });
     };
 
-    const handleOptionsChange = (index: number, options: Option[], sectionIndex?: number) => {
+    const handleOptionsChange = (
+        index: number,
+        options: Option[],
+        sectionIndex?: number
+    ) => {
         dispatch({
             type: "updateField",
             payload: {
@@ -223,13 +248,19 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
                 sectionIndex,
                 field: {
                     ...form.items[index],
-                    ...(["checkbox", "dropdown", "multiple-choice", "section"].includes(form.items[index].type) ? { options } : {}),
+                    ...(["checkbox", "dropdown", "multiple-choice", "section"].includes(form.items[index].type)
+                        ? { options }
+                        : {}),
                 },
             },
         });
     };
 
-    const handleAddOption = (index: number, option: Option, sectionIndex?: number) => {
+    const handleAddOption = (
+        index: number,
+        option: Option,
+        sectionIndex?: number
+    ) => {
         const item = form.items[index];
         const options = "options" in item ? [...item.options, option] : [option];
         dispatch({
@@ -239,15 +270,23 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
                 sectionIndex,
                 field: {
                     ...item,
-                    ...(["checkbox", "multiple-choice", "dropdown", "section"].includes(form.items[index].type) && { options }),
+                    ...(["checkbox", "multiple-choice", "dropdown", "section"].includes(
+                        form.items[index].type
+                    ) && { options }),
                 },
             },
         });
     };
 
-    const handleRemoveOption = (index: number, optionId: Option["id"], sectionIndex?: number) => {
+    const handleRemoveOption = (
+        index: number,
+        optionId: Option["id"],
+        sectionIndex?: number
+    ) => {
         const item = form.items[index];
-        const options = "options" in item ? item.options.filter((option) => option.id !== optionId) : [];
+        const options = "options" in item
+            ? item.options.filter((option) => option.id !== optionId)
+            : [];
         dispatch({
             type: "updateField",
             payload: {
@@ -255,7 +294,9 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
                 sectionIndex,
                 field: {
                     ...item,
-                    ...(["checkbox", "multiple-choice", "dropdown", "section"].includes(form.items[index].type) && { options }),
+                    ...(["checkbox", "multiple-choice", "dropdown", "section"].includes(
+                        form.items[index].type
+                    ) && { options }),
                 },
             },
         });
@@ -291,7 +332,10 @@ export default function FormBuilderProvider({ children }: FormBuilderProps) {
         });
     };
 
-    const addMultipleChoiceField = (multipleChoiceField: MultipleChoiceField, sectionIndex?: number) => {
+    const addMultipleChoiceField = (
+        multipleChoiceField: MultipleChoiceField,
+        sectionIndex?: number
+    ) => {
         dispatch({
             type: "addField",
             payload: {
