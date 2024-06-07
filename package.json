@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/swc-win32-x64-msvc": "^15.0.0-rc.0",
     "@reduxjs/toolkit": "^2.2.5",
     "dom-to-image": "^2.6.0",
     "html2canvas": "^1.4.1",
@@ -19,6 +18,9 @@
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2"
   },
+  "optionalDependencies": {
+    "@next/swc-win32-x64-msvc": "^15.0.0-rc.0"
+  }
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
