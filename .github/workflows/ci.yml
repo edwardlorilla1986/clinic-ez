@@ -30,7 +30,8 @@ jobs:
       - name: Build Next.js project
         run: npm run build
 
-      - name: Deploy (optional)
-        # Add your deployment step here if needed
-        # Example for Vercel:
-        # run: vercel --prod
+      # Uncomment the following steps if you want to deploy your project
+      # - name: Deploy to Vercel
+      #   run: npx vercel --prod
+      #   env:
+      #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
