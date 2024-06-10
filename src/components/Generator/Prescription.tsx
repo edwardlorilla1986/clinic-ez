@@ -170,7 +170,7 @@ const PdfGenerator: React.FC<FormPDFGeneratorProps> = ({ data }) => {
             const itemsForPage = data.items.slice(i, i + itemsPerPage);
             pages.push(
                 <div key={i} className="page" style={{ position: 'relative', width: '918px', height: '1187px' }}>
-                    <img width="918" height="1187" src="/target001.png" alt="background image" />
+                    <img width="918" height="1187" src="clinic-ez/target001.png" alt="background image" />
                     <p style={{ position: 'absolute', top: '50px', left: '521px', whiteSpace: 'nowrap', ...styles.ft10 }}>
                         <b>Dr.&#160;Philip&#160;Javier&#160;II&#160;Tantano</b>
                     </p>
